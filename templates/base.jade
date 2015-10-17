@@ -1,0 +1,31 @@
+doctype html
+html(lang='en')
+	head
+		link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css')
+		link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css')
+		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
+		script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')
+		block title
+			title Helping Hand
+	body(style='padding-top: 70px')
+		//Nav bar
+		nav.navbar.navbar-inverse.navbar-fixed-top
+			.container-fluid
+				.navbar-header
+					a.navbar-brand(href='/') Helping Hand
+				#navbar
+					ul.nav.navbar-nav
+						li.active
+							a(href='/') Home
+						li
+							a Browse
+						li
+							a Search
+
+					ul.nav.navbar-nav.navbar-right
+						//Display Login, or profile stuff if already logged in
+						li
+							a Login
+		.container-fluid
+			block content
+				h1 Welcome to Helping Hand!
