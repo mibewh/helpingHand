@@ -4,4 +4,12 @@ block title
 	title Login
 
 block content
-	
+	h1 Login
+	form.form-signin(method='post', action='/login')
+		.row
+			.col-md-4
+			.col-md-4
+				input.form-control.input-normal(type='text', id='username', placeholder='Username', required)
+				input.form-control(type='password', id='password', placeholder='Password', required)
+				button.btn.btn-lg.btn-primary.btn-block.btn-signin(type='submit') Login
+			.col-md-4

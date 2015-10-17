@@ -1,0 +1,24 @@
+extends ./base.jade
+
+block title
+	title Register
+
+block content
+	h1 Register
+	form.form-signin(method='post', action='/login')
+		.row
+			.col-md-4
+			.col-md-4
+				input.form-control.input-normal(type='text', id='username', placeholder='Username', required)
+				input.form-control.input-normal(type='email', id='email', placeholder='Email Address', required)
+				input.form-control(type='password', id='password', placeholder='Password', required)
+				p.text-left
+					input#client(type='radio', name='typeuser', checked='checked')
+					|    Client
+				p.text-left
+					input#worker(type='radio', name='typeuser')
+					|    Worker
+				button.btn.btn-lg.btn-primary.btn-block.btn-signin(type='submit') Register
+			.col-md-4
+
+//Register: Username, email, password, worker/user

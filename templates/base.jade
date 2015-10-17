@@ -15,8 +15,11 @@ html(lang='en')
 					a.navbar-brand(href='/') Helping Hand
 				#navbar
 					ul.nav.navbar-nav
-						li.active
+						//.active to add the selected thing
+						li
 							a(href='/') Home
+						li
+							a(href='/create') Create
 						li
 							a Browse
 						li
@@ -25,9 +28,9 @@ html(lang='en')
 					ul.nav.navbar-nav.navbar-right
 						//Display Login, or profile stuff if already logged in
 						li
-							a Register
+							a(href='/register') Register
 						li
-							a Login
+							a(href='/login') Login
 		.container-fluid
 			.text-center
 				block content
