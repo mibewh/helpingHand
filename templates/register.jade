@@ -4,12 +4,17 @@ block title
 	title Register
 
 block content
+	- var messages = get_flashed_messages()
 	h1 Register
+	if messages
+		each msg in messages
+			h4
+				i #{msg}
 	form.form-signin(method='post', action='/register')
 		.row
 			.col-md-4
 			.col-md-4
-				input.form-control.input-normal(type='text', name='username', placeholder='Username', required)
+				input.form-control.input-normal(type='text', name='username', placeholder='Username', required, autofocus)
 				input.form-control.input-normal(type='email', name='email', placeholder='Email Address', required)
 				input.form-control(type='password', name='password', placeholder='Password', required)
 				p.text-left
@@ -18,7 +23,11 @@ block content
 				p.text-left
 					input#worker(type='radio', name='typeuser')
 					|    Worker
-				button.btn.btn-lg.btn-primary.btn-block.btn-signin(type='submit') Register
 			.col-md-4
+		.row
+			.col-md-5
+			.col-md-2
+				button.btn.btn-lg.btn-primary.btn-block.btn-signin(type='submit') Login
+			.col-md-5
 
 //Register: Username, email, password, worker/user

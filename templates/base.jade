@@ -29,7 +29,8 @@ html(lang='en')
 						//Display Login, or profile stuff if already logged in
 						if session.user
 							li
-								a(href='/profile') #{session.user}
+								- var url = '/profile/'+session.user
+								a(href=url) #{session.user}
 							li
 								a(href='/logout') Logout					
 						else

@@ -3,3 +3,8 @@ extends ./base.jade
 block content
 	h1 Welcome to Helping Hand!
 	p Please create an account or login to begin using the service.
+	- var messages = get_flashed_messages()
+	if messages
+		each msg in messages
+			h4
+				i #{msg}

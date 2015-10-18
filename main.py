@@ -1,16 +1,16 @@
-from flask import Flask, render_template, g, redirect, request, session
+from flask import Flask, render_template, g, redirect, request, session, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 
 
 app = Flask(__name__)
-app.jinja_env.add_extension(	'pyjade.ext.jinja.PyJadeExtension')
+app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 app.debug=True
 app.secret_key = 'this is soooooo secret right?'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iokqwvbpdqkbsb:kVe-Z6R1qqoAXF2uqtvvNW_kYY@ec2-54-204-15-48.compute-1.amazonaws.com:5432/d983rtid8h2rk'
 db = SQLAlchemy(app)
-db.engine.connect()
+db.engine.connect() 
 
 @app.route('/')
 def index():
@@ -20,15 +20,41 @@ def index():
 def create():
 	return render_template('create.jade')
 
+def login(username, password):
+	#check if user, password combo is in the database
+	#Client table
+	sql=text('''select * from client
+				where client_username='{0}' AND password='{1}';'''\
+				.format(username, password))
+	result=db.engine.execute(sql)
+	result=[r[0] for r in result]
+	if result != []:
+		session['user'] = username
+		session['type'] = 'client'
+		return True
+	#Worker table
+	sql=text('''select * from worker
+				where worker_username='{0}' AND password='{1}';'''\
+				.format(username, password))
+	result=db.engine.execute(sql)
+	result=[r[0] for r in result]
+	if result != []:
+		session['user'] = username
+		session['type'] = 'worker'
+		return True
+
+	return False
+
 @app.route('/login', methods=('GET', 'POST'))
 def loginPage():
 	if request.method == 'POST':
 		#Check the login
-		if request.form.get('username')=='admin' and request.form.get('password')=='admin':
-			session['user'] = 'admin'
-			return render_template('index.jade')
-		else:
-			return render_template('index.jade')
+		if not login(request.form.get('username'), request.form.get('password')):
+			#Flash stuff and print error
+			flash('Invalid Login')
+			return render_template('login.jade')		
+		return render_template('index.jade')
+
 	else:
 		return render_template('login.jade')
 
@@ -36,6 +62,7 @@ def loginPage():
 def logoutPage():
 	if session['user']:
 		session['user'] = None
+		flash('Logged out successfuly')
 	return redirect('/')
 
 @app.route('/register', methods=('GET', 'POST'))
@@ -46,17 +73,18 @@ def register():
 		result=db.engine.execute(sql)
 		result=[r[0] for r in result]
 		if  result != []:
-			print('Already exists')
-			return redirect('/')
+			flash('Username already taken')
+			return render_template('register.jade')
 		sql=text('''insert into client(client_username, password, email)values('{0}', '{1}', '{2}');'''\
 		.format(request.form.get('username'), request.form.get('password'), request.form.get('email')))
 		db.engine.execute(sql)
-		return redirect('/')
+		login(request.form.get('username'), request.form.get('password'))
+		return redirect('/profile/'+request.form.get('username'))
+		
 	return render_template('register.jade')
 
-@app.route('/user/<username>')
-def profile(username): pass
-
-# @app.route('/profile/<username>')
-# def profile(username):
-# 	#Check if logged in
+@app.route('/profile/<username>')
+def profile(username):
+	if session['user'] == username:
+		return render_template('profile.jade', username=username)
+	return redirect('/')
