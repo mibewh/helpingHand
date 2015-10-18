@@ -53,7 +53,7 @@ def loginPage():
 			#Flash stuff and print error
 			flash('Invalid Login')
 			return render_template('login.jade')		
-		return render_template('index.jade')
+		return redirect('/profile/'+session['user'])
 
 	else:
 		return render_template('login.jade')
@@ -80,7 +80,7 @@ def register():
 		db.engine.execute(sql)
 		login(request.form.get('username'), request.form.get('password'))
 		return redirect('/profile/'+request.form.get('username'))
-		
+
 	return render_template('register.jade')
 
 @app.route('/profile/<username>')
