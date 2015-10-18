@@ -5,13 +5,13 @@ block title
 
 block content
 	h1 Register
-	form.form-signin(method='post', action='/login')
+	form.form-signin(method='post', action='/register')
 		.row
 			.col-md-4
 			.col-md-4
-				input.form-control.input-normal(type='text', id='username', placeholder='Username', required)
-				input.form-control.input-normal(type='email', id='email', placeholder='Email Address', required)
-				input.form-control(type='password', id='password', placeholder='Password', required)
+				input.form-control.input-normal(type='text', name='username', placeholder='Username', required)
+				input.form-control.input-normal(type='email', name='email', placeholder='Email Address', required)
+				input.form-control(type='password', name='password', placeholder='Password', required)
 				p.text-left
 					input#client(type='radio', name='typeuser', checked='checked')
 					|    Client

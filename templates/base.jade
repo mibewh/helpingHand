@@ -27,10 +27,16 @@ html(lang='en')
 
 					ul.nav.navbar-nav.navbar-right
 						//Display Login, or profile stuff if already logged in
-						li
-							a(href='/register') Register
-						li
-							a(href='/login') Login
+						if session.user
+							li
+								a(href='/profile') #{session.user}
+							li
+								a(href='/logout') Logout					
+						else
+							li
+								a(href='/register') Register
+							li
+								a(href='/login') Login
 		.container-fluid
 			.text-center
 				block content
