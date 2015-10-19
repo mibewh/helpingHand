@@ -134,6 +134,7 @@ def deleteProfile(username):
 		sql=text('''DELETE from worker where worker_username='{0}';'''.format(username))
 		db.engine.execute(sql)
 		session['user'] = None
+		flash('Account deleted.')
 		return redirect('/')
 
 	return redirect('/profile/'+username)

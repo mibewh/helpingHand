@@ -11,10 +11,15 @@ def create_service_request():
 						values('{0}', '{1}', '{2}', '{3}', '{4}');'''\
 		.format(session["user"], request.form.get('address'), request.form.get('title'), request.form.get('description'), request.form.get("time")))
 		db.engine.execute(sql)
+		flash('Service request created.')
+		return redirect('/')
+	if session['type'] == 'worker':
+		flash('You must be a client to create service requests.')
 		return redirect('/')
 	if session['user']:
 		return render_template('create.jade')
 	else:
+		flash('Please login before creating requests.')
 		return redirect('/')
 
 @requestsBP.route('/search', methods=('GET', 'POST'))
