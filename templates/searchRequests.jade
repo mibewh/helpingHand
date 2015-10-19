@@ -1,0 +1,28 @@
+extends ./base.jade
+
+block title
+	if query
+		title query
+	else
+		title Search Requests
+
+block content
+	form(method='post', action='/search')
+		.row
+			.col-md-4
+			.col-md-4
+				input.form-control.input-normal(type='text', name='query', placeholder='Search service requests', required, autofocus)
+			.col-md-4
+		.row
+			.col-md-5
+			.col-md-2
+				button.btn.btn-lg.btn-primary.btn-block.btn-signin(type='submit') Submit
+			.col-md-5
+		.row
+			if results
+				each res in results
+					h2 #{res[0]}
+					p #{res[1]}
+					p Client: #{res[2]}
+					p Time: #{res[3]}
+					p Address: #{res[4]}

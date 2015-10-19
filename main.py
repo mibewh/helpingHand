@@ -12,9 +12,9 @@ db = SQLAlchemy(app)
 db.engine.connect() 
 
 from user import users
-from request import request
+from request import requestsBP
 app.register_blueprint(users)
-app.register_blueprint(request)
+app.register_blueprint(requestsBP)
 
 @app.route('/')
 def index():
