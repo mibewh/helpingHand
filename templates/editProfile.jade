@@ -1,0 +1,21 @@
+extends ./base.jade
+
+block title
+	- var t = 'Edit ' + session.user
+	title #{t}
+
+block content
+	- var url = '/profile/'+username+'/edit'
+	form.form-signin(method='post', action=url)
+		.row
+			.col-md-4
+			.col-md-4
+				| Email
+				input.form-control.input-normal(type='email', name='email', placeholder='Email Address', value=email, required)
+				| Phone Number	
+				input.form-control.input-normal(type='number', name='phone', placeholder='Phone', value=phone)
+		.row
+			.col-md-5
+			.col-md-2
+				button.btn.btn-lg.btn-primary.btn-block.btn-signin(type='submit') Update
+			.col-md-5
