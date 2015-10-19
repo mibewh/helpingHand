@@ -17,7 +17,7 @@ def searchName():
 	if request.method == 'POST':
 		search = request.form.get('search')
 
-		sql = text('''sp_awesome_search_service_requests('{0}')'''.format(search)
+		sql = text('''"sp_awesome_search_service_requests"('{0}')'''.format(search)
 
 		results = db.engine.execute(sql)
 		return results
