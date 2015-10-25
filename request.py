@@ -7,20 +7,20 @@ requestsBP = Blueprint('request', __name__)
 @requestsBP.route('/create', methods=('GET', 'POST'))
 def create_service_request():
 	if request.method == 'POST':
-		sql = text('''insert into service_request(client_username, address, title, description, schedule)
-						values('{0}', '{1}', '{2}', '{3}', '{4}');'''\
-		.format(session["user"], request.form.get('address'), request.form.get('title'), request.form.get('description'), request.form.get("time")))
-		db.engine.execute(sql)
+		sql = text('''INSERT INTO service_request(client_username, address, title, description, schedule)
+						VALUES(:user, :address, :title, :description, :time);''')
+		db.engine.execute(sql, user=session["user"], address=request.form.get('address'), title=request.form.get('title'),\
+							description=request.form.get('description'), time=request.form.get("time"))
 		flash('Service request created.')
 		return redirect('/')
-	if session['type'] == 'worker':
-		flash('You must be a client to create service requests.')
-		return redirect('/')
-	if session['user']:
-		return render_template('create.jade')
-	else:
+	if not session.get('user'):
 		flash('Please login before creating requests.')
 		return redirect('/')
+	elif session['type'] == 'worker':
+		flash('You must be a client to create service requests.')
+		return redirect('/')
+	else:
+		return render_template('create.jade')
 
 @requestsBP.route('/search', methods=('GET', 'POST'))
 def searchName():
@@ -31,10 +31,10 @@ def searchName():
 		sql = text('''SELECT sr.title, sr.description, sr.client_username, sr.schedule, sr.address
 						FROM service_request sr
 						WHERE
-							sr.title LIKE '%'||'{0}'||'%' OR
-							sr.description LIKE '%'||'{0}'||'%' OR
-							sr.address LIKE '%'||'{0}'||'%';'''.format(search))
-		results = db.engine.execute(sql)
+							sr.title LIKE '%'||:search||'%' OR
+							sr.description LIKE '%'||:search||'%' OR
+							sr.address LIKE '%'||:search||'%';''')
+		results = db.engine.execute(sql, search=search)
 		results = results.fetchall()
 		return render_template('searchRequests.jade', results=results)
 	return render_template('searchRequests.jade')

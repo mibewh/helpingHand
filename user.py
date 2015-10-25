@@ -7,20 +7,18 @@ users = Blueprint('users', __name__)
 def login(username, password):
 	#check if user, password combo is in the database
 	#Client table
-	sql=text('''select * from client
-				where client_username='{0}' AND password='{1}';'''\
-				.format(username, password))
-	result=db.engine.execute(sql)
+	sql=text('''SELECT * FROM client
+				WHERE client_username=:username AND password=:password;''')
+	result=db.engine.execute(sql, username=username, password=password)
 	result=[r[0] for r in result]
 	if result != []:
 		session['user'] = username
 		session['type'] = 'client'
 		return True
 	#Worker table
-	sql=text('''select * from worker
-				where worker_username='{0}' AND password='{1}';'''\
-				.format(username, password))
-	result=db.engine.execute(sql)
+	sql=text('''SELECT * FROM worker
+				WHERE worker_username=:username AND password=:password;''')
+	result=db.engine.execute(sql, username=username, password=password)
 	result=[r[0] for r in result]
 	if result != []:
 		session['user'] = username
@@ -50,15 +48,13 @@ def logoutPage():
 	return redirect('/')
 
 def verifyNew(username):
-	sql=text('''select * from client where client_username='{0}';'''\
-			.format(request.form.get('username')))
-	result=db.engine.execute(sql)
+	sql=text('''SELECT * FROM client WHERE client_username=:username;''')
+	result=db.engine.execute(sql, username=username)
 	result=[r[0] for r in result]
 	if result != []:
 		return False
-	sql=text('''select * from worker where worker_username='{0}';'''\
-			.format(request.form.get('username')))
-	result=db.engine.execute(sql)
+	sql=text('''SELECT * FROM worker WHERE worker_username=:username;''')
+	result=db.engine.execute(sql, username=username)
 	result=[r[0] for r in result]
 	if result != []:
 		return False
@@ -67,12 +63,10 @@ def verifyNew(username):
 
 def register(username, password, email, phone, type):
 	if type == 'client':
-		sql=text('''insert into client(client_username, password, email, phone)values('{0}', '{1}', '{2}', '{3}');'''\
-		.format(username, password, email, phone))
+		sql=text('''INSERT INTO client(client_username, password, email, phone)VALUES(:username, :password, :email, :phone);''')
 	else:
-		sql=text('''insert into worker(worker_username, password, email, phone)values('{0}', '{1}', '{2}', '{3}');'''\
-		.format(username, password, email, phone))
-	db.engine.execute(sql)
+		sql=text('''INSERT INTO worker(worker_username, password, email, phone)VALUES(:username, :password, :email, :phone);''')
+	db.engine.execute(sql, username=username, password=password, email=email, phone=phone)
 
 @users.route('/register', methods=('GET', 'POST'))
 def registerPage():
@@ -87,15 +81,13 @@ def registerPage():
 	return render_template('register.jade')
 
 def getProfile(username):
-	sql=text('''select client_username, email, phone from client where client_username='{0}';'''\
-			.format(username))
-	result=db.engine.execute(sql)
+	sql=text('''SELECT client_username, email, phone FROM client WHERE client_username=:username;''')
+	result=db.engine.execute(sql, username=username)
 	ret = result.fetchone()
 	if ret:
 		return (ret, 'Client')
-	sql=text('''select worker_username, email, phone from worker where worker_username='{0}';'''\
-			.format(username))
-	result=db.engine.execute(sql)
+	sql=text('''SELECT worker_username, email, phone FROM worker WHERE worker_username=:username;''')
+	result=db.engine.execute(sql, username=username)
 	return (result.fetchone(), 'Worker')
 
 
@@ -110,15 +102,13 @@ def profile(username):
 def editProfile(username):
 	if request.method=='POST':
 		sql=text('''UPDATE client
-					SET email='{0}', phone='{1}'
-					WHERE client_username='{2}';'''
-					.format(request.form.get('email'), request.form.get('phone'), username))
-		db.engine.execute(sql)
+					SET email=:email, phone=:phone
+					WHERE client_username=:username;''')
+		db.engine.execute(sql, email=request.form.get('email'), phone=request.form.get('phone'), username=username)
 		sql=text('''UPDATE worker
-					SET email='{0}', phone='{1}'
-					WHERE worker_username='{2}';'''
-					.format(request.form.get('email'), request.form.get('phone'), username))
-		db.engine.execute(sql)
+					SET email=:email, phone=:phone
+					WHERE worker_username=:username;''')
+		db.engine.execute(sql, email=request.form.get('email'), phone=request.form.get('phone'), username=username)
 		return redirect('/profile/'+username)
 
 	if session['user'] == username:
@@ -129,10 +119,10 @@ def editProfile(username):
 @users.route('/profile/<username>/delete')
 def deleteProfile(username):
 	if session['user'] == username:
-		sql=text('''DELETE from client where client_username='{0}';'''.format(username))
-		db.engine.execute(sql)
-		sql=text('''DELETE from worker where worker_username='{0}';'''.format(username))
-		db.engine.execute(sql)
+		sql=text('''DELETE FROM client WHERE client_username=:username;''')
+		db.engine.execute(sql, username=username)
+		sql=text('''DELETE FROM worker WHERE worker_username=:username;''')
+		db.engine.execute(sql, username=username)
 		session['user'] = None
 		flash('Account deleted.')
 		return redirect('/')
