@@ -42,6 +42,8 @@ def searchName():
 @requestsBP.route('/requests')
 def viewRequests():
 	if session.get('user'):
+		if session['type'] == 'worker':
+			return redirect('/pending')
 		sql = text('''SELECT * FROM service_request WHERE client_username=:username;''')
 		results = db.engine.execute(sql, username=session.get('user'))
 		results = results.fetchall()
@@ -59,8 +61,8 @@ def getWorkers(id):
 	result=db.engine.execute(sql, id=id)
 	return result.fetchall()
 
-@requestsBP.route('/requests/<service_id>')#
-def request(service_id):
+@requestsBP.route('/requests/<service_id>')#check info here
+def viewRequest(service_id):
 	result = getRequest(service_id)
 	names = getWorkers(service_id)
 	if(result):
@@ -77,4 +79,3 @@ def viewPending():
 		results = results.fetchall()
 		return render_template('pending.jade', requests=results)
 	return redirect('/')
-

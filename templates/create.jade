@@ -8,15 +8,13 @@ block content
 		h1 Create Service Request
 	form(method='POST', action='/create')
 		.row
-			.col-md-4
-				//title
-				input.form-control.input-normal(type='text', name='title', placeholder='Title', required, autofocus)
-		.row
 			.col-md-6
+				.col-md-8
+					//title
+					input.form-control.input-normal(type='text', name='title', placeholder='Title', required, autofocus)
 				textarea.form-control(name='description', placeholder='Description', rows='5')
 				input.form-control(type='text', name='address', placeholder='Address')
-		.row
-			.col-md-3
+			.col-md-6
 				//Time of job
 				input.form-control.input-normal(type='text', name='time', placeholder='Time', required)
 		.row
