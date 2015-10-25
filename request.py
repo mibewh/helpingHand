@@ -42,7 +42,9 @@ def searchName():
 @requestsBP.route('/requests')
 def viewRequests():
 	if session.get('user'):
-		sql = '''SELECT * FROM service_request WHERE '''
-		return render_template('requests.jade')
+		sql = text('''SELECT * FROM service_request WHERE client_username=:username;''')
+		results = db.engine.execute(sql, username=session.get('user'))
+		results = results.fetchall()
+		return render_template('requests.jade', requests=results)
 	else:
-		redirect('/')
+		return redirect('/')
