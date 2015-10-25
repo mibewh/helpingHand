@@ -56,17 +56,17 @@ def getRequest(id):
 	result=db.engine.execute(sql, id=id)
 	return result.fetchone()
 
-def getWorkers():
-	sql=text('''SELECT worker_username FROM worker;''')
-	result=db.engine.execute(sql)
+def getWorkers(id):
+	sql=text('''SELECT worker_username FROM worker_request WHERE service_id=:id;''')
+	result=db.engine.execute(sql, id=id)
 	return result.fetchall()
+
 
 @requestsBP.route('/requests/<service_id>')#check info here
 def viewRequest(service_id):
 	result = getRequest(service_id)
-	names = getWorkers()
+	names = getWorkers(service_id)
 	if(result):
 		return render_template('request.jade', client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4], worker_names=names)
-		#check info above
 	return redirect('/')
 
