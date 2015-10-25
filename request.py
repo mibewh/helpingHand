@@ -38,3 +38,11 @@ def searchName():
 		results = results.fetchall()
 		return render_template('searchRequests.jade', results=results)
 	return render_template('searchRequests.jade')
+
+@requestsBP.route('/requests')
+def viewRequests():
+	if session.get('user'):
+		sql = '''SELECT * FROM service_request WHERE '''
+		return render_template('requests.jade')
+	else:
+		redirect('/')
