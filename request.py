@@ -39,6 +39,16 @@ def searchName():
 		return render_template('searchRequests.jade', results=results)
 	return render_template('searchRequests.jade')
 
+@requestsBP.route('/requests')
+def viewRequests():
+	if session.get('user'):
+		sql = text('''SELECT * FROM service_request WHERE client_username=:username;''')
+		results = db.engine.execute(sql, username=session.get('user'))
+		results = results.fetchall()
+		return render_template('requests.jade', requests=results)
+	else:
+		return redirect('/')
+
 def getRequest(id):
 	sql=text('''SELECT client_username, title, description, schedule, address FROM service_request WHERE service_id=:id;''')
 	result=db.engine.execute(sql, id=id)
