@@ -22,6 +22,7 @@ def create_service_request():
 	else:
 		return render_template('create.jade')
 
+
 @requestsBP.route('/search', methods=('GET', 'POST'))
 def searchName():
 	if request.method == 'POST':
