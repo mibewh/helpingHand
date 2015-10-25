@@ -68,3 +68,15 @@ def request(service_id):
 		#check info above
 	return redirect('/')
 
+@requestsBP.route('/pending')
+def viewPending():
+	if session.get('user') and session['type'] == 'worker':
+		sql=text('''SELECT client_username, title, description, schedule, address
+								FROM service_request sr, worker_request wr, worker w
+								WHERE sr.service_id=wr.service_id AND wr.worker_username=w.worker_username AND w.worker_username=:username''')
+		results = db.engine.execute(sql, username=session.get('user'))
+		results = results.fetchall()
+		return render_template('pending.jade', requests=results)
+	else:
+		return redirect('/')
+
