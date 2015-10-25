@@ -20,7 +20,10 @@ def create_service_request():
 		flash('You must be a client to create service requests.')
 		return redirect('/')
 	else:
-		return render_template('create.jade')
+		sql = text('''SELECT worker_username FROM worker''')
+		results = db.engine.execute(sql)
+		worker_names = [res[0] for res in results]
+		return render_template('create.jade', workers=worker_names)
 
 @requestsBP.route('/search', methods=('GET', 'POST'))
 def searchName():
