@@ -42,6 +42,8 @@ def searchName():
 @requestsBP.route('/requests')
 def viewRequests():
 	if session.get('user'):
+		if session['type'] == 'worker':
+			return redirect('/pending')
 		sql = text('''SELECT * FROM service_request WHERE client_username=:username;''')
 		results = db.engine.execute(sql, username=session.get('user'))
 		results = results.fetchall()
@@ -60,7 +62,7 @@ def getWorkers():
 	return result.fetchall()
 
 @requestsBP.route('/requests/<service_id>')#check info here
-def request(service_id):
+def viewRequest(service_id):
 	result = getRequest(service_id)
 	names = getWorkers()
 	if(result):
