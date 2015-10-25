@@ -31,14 +31,15 @@ def searchName():
 		sql = text('''SELECT sr.title, sr.description, sr.client_username, sr.schedule, sr.address
 						FROM service_request sr
 						WHERE
-							sr.title LIKE '%'||:search||'%' OR
-							sr.description LIKE '%'||:search||'%' OR
-							sr.address LIKE '%'||:search||'%';''')
+							UPPER(sr.title) LIKE UPPER('%'||:search||'%') OR
+							UPPER(sr.description) LIKE UPPER('%'||:search||'%') OR
+							UPPER(sr.address) LIKE UPPER('%'||:search||'%');''')
 		results = db.engine.execute(sql, search=search)
 		results = results.fetchall()
 		return render_template('searchRequests.jade', results=results)
 	return render_template('searchRequests.jade')
 
+<<<<<<< HEAD
 def getRequest(id):
 	sql=text('''SELECT client_username, title, description, schedule, address FROM service_request WHERE service_id=:id;''')
 	result=db.engine.execute(sql, id=id)
@@ -59,3 +60,12 @@ def request(service_id):
 	return redirect('/')
 
 #select worker into tables with service request
+=======
+@requestsBP.route('/requests')
+def viewRequests():
+	if session.get('user'):
+		sql = '''SELECT * FROM service_request WHERE '''
+		return render_template('requests.jade')
+	else:
+		redirect('/')
+>>>>>>> 29700025420b62a33cd33c84234b406341ff7f27
