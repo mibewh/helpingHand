@@ -22,7 +22,6 @@ def create_service_request():
 	else:
 		return render_template('create.jade')
 
-
 @requestsBP.route('/search', methods=('GET', 'POST'))
 def searchName():
 	if request.method == 'POST':
@@ -62,7 +61,6 @@ def getWorkers(id):
 	result=db.engine.execute(sql, id=id)
 	return result.fetchall()
 
-
 @requestsBP.route('/requests/<service_id>')#check info here
 def viewRequest(service_id):
 	result = getRequest(service_id)
@@ -70,4 +68,3 @@ def viewRequest(service_id):
 	if(result):
 		return render_template('request.jade', client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4], worker_names=names)
 	return redirect('/')
-
