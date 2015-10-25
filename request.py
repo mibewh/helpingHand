@@ -32,7 +32,10 @@ def create_service_request():
 		flash('You must be a client to create service requests.')
 		return redirect('/')
 	else:
-		return render_template('create.jade')
+		sql = text('''SELECT worker_username FROM worker''')
+		results = db.engine.execute(sql)
+		worker_names = [res[0] for res in results]
+		return render_template('create.jade', workers=worker_names)
 
 @requestsBP.route('/search', methods=('GET', 'POST'))
 def searchName():
@@ -79,4 +82,15 @@ def viewRequest(service_id):
 	names = getWorkers(service_id)
 	if(result):
 		return render_template('request.jade', client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4], worker_names=names)
+	return redirect('/')
+
+@requestsBP.route('/pending')
+def viewPending():
+	if session.get('user') and session['type'] == 'worker':
+		sql=text('''SELECT client_username, title, description, schedule, address
+								FROM service_request sr, worker_request wr, worker w
+								WHERE sr.service_id=wr.service_id AND wr.worker_username=w.worker_username AND w.worker_username=:username''')
+		results = db.engine.execute(sql, username=session.get('user'))
+		results = results.fetchall()
+		return render_template('pending.jade', requests=results)
 	return redirect('/')

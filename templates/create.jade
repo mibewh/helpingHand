@@ -5,18 +5,32 @@ block title
 
 block content
 	.text-left
-		h1 Create Service Request
 	form(method='POST', action='/create')
 		.row
 			.col-md-6
-				.col-md-8
-					//title
-					input.form-control.input-normal(type='text', name='title', placeholder='Title', required, autofocus)
-				textarea.form-control(name='description', placeholder='Description', rows='5')
-				input.form-control(type='text', name='address', placeholder='Address')
+				.row
+					.col-md-12
+						h1.text-left Create Service Request
+				.row
+					.col-md-8
+						//title
+						input.form-control.input-normal(type='text', name='title', placeholder='Title', required, autofocus)
+				.row
+					.col-md-12
+						textarea.form-control(name='description', placeholder='Description', rows='5')
+						input.form-control(type='text', name='address', placeholder='Address')
+				.row
+					.col-md-6
+						//Time of job
+						input.form-control.input-normal(type='text', name='time', placeholder='Time', required)
+				.row
+					.col-md-2
+						button.btn.btn-primary.btn-block.btn-signin(type='submit') Submit
 			.col-md-6
-				//Time of job
-				input.form-control.input-normal(type='text', name='time', placeholder='Time', required)
-		.row
-			.col-md-1
-				button.btn.btn-primary.btn-block.btn-signin(type='submit') Submit
+				.row
+					.col-md-12.text-left
+						h2 Workers:
+						each worker in workers
+							.row.col-md-12
+								input(type='checkbox', name='workers', value=worker) 
+								|  #{worker}
