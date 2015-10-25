@@ -76,6 +76,5 @@ def viewPending():
 		results = db.engine.execute(sql, username=session.get('user'))
 		results = results.fetchall()
 		return render_template('pending.jade', requests=results)
-	else:
-		return redirect('/')
+	return redirect('/')
 
