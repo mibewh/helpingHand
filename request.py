@@ -68,11 +68,3 @@ def request(service_id):
 		#check info above
 	return redirect('/')
 
-@requestsBP.route('/requests')
-def viewRequests():
-	if session.get('user'):
-		sql = text('''SELECT * FROM service_request WHERE client_username=:user;''')
-		db.engine.execute(sql, user=session["user"])
-		return render_template('requests.jade')
-	else:
-		redirect('/')
