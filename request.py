@@ -67,3 +67,4 @@ def request(service_id):
 		return render_template('request.jade', client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4], worker_names=names)
 		#check info above
 	return redirect('/')
+
