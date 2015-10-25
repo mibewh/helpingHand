@@ -31,9 +31,9 @@ def searchName():
 		sql = text('''SELECT sr.title, sr.description, sr.client_username, sr.schedule, sr.address
 						FROM service_request sr
 						WHERE
-							sr.title LIKE '%'||:search||'%' OR
-							sr.description LIKE '%'||:search||'%' OR
-							sr.address LIKE '%'||:search||'%';''')
+							UPPER(sr.title) LIKE UPPER('%'||:search||'%') OR
+							UPPER(sr.description) LIKE UPPER('%'||:search||'%') OR
+							UPPER(sr.address) LIKE UPPER('%'||:search||'%');''')
 		results = db.engine.execute(sql, search=search)
 		results = results.fetchall()
 		return render_template('searchRequests.jade', results=results)
