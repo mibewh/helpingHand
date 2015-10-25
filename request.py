@@ -38,3 +38,24 @@ def searchName():
 		results = results.fetchall()
 		return render_template('searchRequests.jade', results=results)
 	return render_template('searchRequests.jade')
+
+def getRequest(id):
+	sql=text('''SELECT client_username, title, description, schedule, address FROM service_request WHERE service_id=:id;''')
+	result=db.engine.execute(sql, id=id)
+	return result
+
+def getWorkers():
+	sql=text('''SELECT worker_username FROM worker;''')
+	result=db.engine.execute(sql)
+	return result
+
+@requestsBP.route('/requests/<service_id>')#check info here
+def request(service_id):
+	request = getRequest(service_id)
+	names = getWorkers()
+	if(request):
+		return render_template('requests.jade', client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4], worker_names=names)
+		#check info above
+	return redirect('/')
+
+#select worker into tables with service request
