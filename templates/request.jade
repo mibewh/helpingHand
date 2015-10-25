@@ -1,0 +1,18 @@
+extends ./base.jade
+
+block title
+	title #{title}
+
+block content
+	.text-center
+		h1 title
+		p Client 
+			a(href='/profile/'+client_username) #{client_username}
+		p #{decription}
+		p Time: #{schedule}
+		p Address #{address}
+		p Workers:
+		ul
+			each worker in worker_names
+				li
+					a(href='/profile/'+worker[0]) #{worker[0]}
