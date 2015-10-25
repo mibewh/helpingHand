@@ -18,11 +18,11 @@ def create_service_request():
 		db.engine.execute(sql, user=session["user"], address=request.form.get('address'), title=request.form.get('title'),\
 							description=request.form.get('description'), time=request.form.get("time"))
 		sql2 = text('''SELECT service_id FROM service_request WHERE client_username=:user AND address=:address AND
-						title=:title AND description=:description AND time=:time;''')
-		result = db.engine.execute(sql, user=session["user"], address=request.form.get('address'), title=request.form.get('title'),\
+						title=:title AND description=:description AND schedule=:time;''')
+		result = db.engine.execute(sql2, user=session["user"], address=request.form.get('address'), title=request.form.get('title'),\
 							description=request.form.get('description'), time=request.form.get("time"))
 		idnum = result.fetchone()
-		selectWorkers(idnum)
+		selectWorkers(idnum[0])
 		flash('Service request created.')
 		return redirect('/')
 	if not session.get('user'):
@@ -76,7 +76,7 @@ def getWorkers(id):
 	result=db.engine.execute(sql, id=id)
 	return result.fetchall()
 
-@requestsBP.route('/requests/<service_id>')#check info here
+@requestsBP.route('/requests/<service_id>')
 def viewRequest(service_id):
 	result = getRequest(service_id)
 	names = getWorkers(service_id)
