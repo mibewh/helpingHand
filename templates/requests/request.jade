@@ -17,7 +17,14 @@ block content
 			ul
 			each worker in worker_names
 				li
-					a(href='/profile/'+worker[0]) #{worker[0]}
+					form(method='post', action='/createcontract')
+						p
+							a(href='/profile/'+worker[0]) #{worker[0]}
+							if worker[1]
+								input(type='hidden', name='worker', value=worker[0])
+								a(href='/createcontract')
+									button.btn.btn-xs.btn-primary Contract
+
 			if session.user == client_username
 				p
 				a(href='/requests/'+id+'/edit') Edit

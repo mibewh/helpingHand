@@ -17,9 +17,9 @@ block content
 					p.list-group-item Address: #{res[5]}
 					if res[6]
 						form(method='post', action='/pending/'+'#{res[0]}'+'/accept')
-							button.btn.btn-lg.btn-danger.btn-block.btn-signin(type='submit') Not Interested
+							button.btn.btn-lg.btn-danger.btn-block(type='submit') Not Interested
 					else
 						form(method='post', action='/pending/'+'#{res[0]}'+'/accept')
-							button.btn.btn-lg.btn-success.btn-block.btn-signin(type='submit') Interested
+							button.btn.btn-lg.btn-success.btn-block(type='submit') Interested
 	else
 		p No results found

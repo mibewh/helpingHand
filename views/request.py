@@ -68,12 +68,12 @@ def viewRequests():
 
 def getRequest(service_id):
 	sql=text('''SELECT client_username, title, description, schedule, address FROM service_request WHERE service_id=:id;''')
-	result=db.engine.execute(sql, service_id=id)
+	result=db.engine.execute(sql, id=service_id)
 	return result.fetchone()
 
 def getWorkers(service_id):
 	sql=text('''SELECT worker_username, interested FROM worker_request WHERE service_id=:id;''')
-	result=db.engine.execute(sql, service_id=id)
+	result=db.engine.execute(sql, id=service_id)
 	return result.fetchall()
 
 @requestsBP.route('/requests/<service_id>')
