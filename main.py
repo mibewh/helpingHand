@@ -13,8 +13,10 @@ db.engine.connect()
 
 from user import users
 from request import requestsBP
+from contract import contractBP
 app.register_blueprint(users)
 app.register_blueprint(requestsBP)
+app.register_blueprint(contractBP)
 
 @app.route('/')
 def index():
