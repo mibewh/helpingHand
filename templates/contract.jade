@@ -1,0 +1,14 @@
+extends ./base.jade
+
+block title
+	title #{title}
+
+block content
+	.text-center
+		h1 #{title}
+		p Client 
+			a(href='/profile/'+client_username) #{client_username}
+		p Worker 
+			a(hred='/profile/'+worker_username) #{worker_username}
+		p Address #{address}
+		p Money #{money}
