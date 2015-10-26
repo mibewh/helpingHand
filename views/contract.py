@@ -8,12 +8,12 @@ contractBP = Blueprint('contract', __name__, template_folder=app.template_folder
 def submitContract():
 	if request.method=='POST':
 		sql = text('''INSERT INTO contract
-					  (client_username, worker_username, service_id, time)
-					  VALUES (:client_username, :worker_username, :service_id, :time)''')
-		sql2 = text('''SELECT client_username FROM service_request WHERE service_id=:service_id''')
-		result = db.engine.execute(sql2, request.form.get('service_id'))
-		result = result.fetchone()
-		db.engine.execute(sql, client_username=result, worker_username=request.form.get('worker_username'), service_id=request.form.get('service_id'), time=request.form.get('time'))
+					  (worker_username, service_id, time, contract_status)
+					  VALUES (:worker_username, :service_id, :time, 'pending');''')
+		db.engine.execute(sql,
+			worker_username=request.form.get('worker_username'), \
+			service_id=request.form.get('service_id'), \
+			time=request.form.get('time'))
 		flash('Contract created')
 		return redirect('/')
 	else:
@@ -30,7 +30,7 @@ def createContract():
 	results = db.engine.execute(sql, id=request.form.get('service_id'), worker=request.form.get('worker'))
 	res = results.fetchone()
 	return render_template('createContract.jade', title=res[0], description=res[1], address=res[2], time=res[3], \
-							service_id=request.form.get('service_id'), worker_username=request.form.get('worker_username'))
+							service_id=request.form.get('service_id'), worker_username=request.form.get('worker'))
 
 @contractBP.route('/contracts/<contract_id>')
 def viewContract(contract_id):
