@@ -16,7 +16,7 @@ def viewContract(contract_id):
 	return redirect('/')
 
 @contractBP.route('/contracts')
-def viewRequests():
+def viewContracts():
 	if session.get('user'):
 		sql = text('''SELECT * FROM contract 
 					WHERE client_username=:username
