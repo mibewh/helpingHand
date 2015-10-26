@@ -15,5 +15,11 @@ block content
 					p.list-group-item #{res[3]}
 					p.list-group-item Time: #{res[4]}
 					p.list-group-item Address: #{res[5]}
+					if res[6]
+						form(method='post', action='/pending/'+'#{res[0]}'+'/accept')
+							button.btn.btn-lg.btn-danger.btn-block.btn-signin(type='submit') Not Interested
+					else
+						form(method='post', action='/pending/'+'#{res[0]}'+'/accept')
+							button.btn.btn-lg.btn-success.btn-block.btn-signin(type='submit') Interested
 	else
 		p No results found

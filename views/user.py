@@ -3,7 +3,6 @@ from sqlalchemy.sql import text
 from . import db, app
 
 users = Blueprint('users', __name__, template_folder=app.template_folder+'/users')
-print(users.template_folder)
 
 def login(username, password):
 	#check if user, password combo is in the database

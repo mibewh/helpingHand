@@ -87,7 +87,7 @@ def viewRequest(service_id):
 @requestsBP.route('/pending')
 def viewPendings():
 	if session.get('user') and session['type'] == 'worker':
-		sql=text('''SELECT sr.service_id, client_username, title, description, schedule, address
+		sql=text('''SELECT sr.service_id, client_username, title, description, schedule, address, interested
 								FROM service_request sr, worker_request wr, worker w
 								WHERE sr.service_id=wr.service_id AND wr.worker_username=w.worker_username AND w.worker_username=:username''')
 		results = db.engine.execute(sql, username=session.get('user'))
@@ -103,6 +103,19 @@ def viewPending(service_id):
 	if result:
 		return render_template('pending.jade', id=service_id, client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4])
 	return redirect('/')
+
+@requestsBP.route('/pending/<service_id>/accept', methods=('GET', 'POST'))
+def interestRequest(service_id):
+	if request.method == 'GET': return redirect('/')
+	if session.get('user') and session['type'] == 'worker':
+		sql = text('''SELECT interested FROM worker_request WHERE service_id=:id AND worker_username=:user;''')
+		results = db.engine.execute(sql, id=service_id, user=session['user'])
+		interested = results.fetchone()[0]
+		sql = text('UPDATE worker_request SET interested=:interested WHERE service_id=:id AND worker_username=:user;')
+		db.engine.execute(sql, interested = not interested, id=service_id, user=session['user'])
+		return redirect('/pending')
+	else: return redirect('/')
+
 
 @requestsBP.route('/requests/<service_id>/edit', methods=('GET', 'POST'))
 def editRequest(service_id):
