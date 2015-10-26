@@ -1,8 +1,8 @@
 from flask import Flask, render_template, g, redirect, request, session, flash, Blueprint
 from sqlalchemy.sql import text
-from main import db
+from . import db, app
 
-requestsBP = Blueprint('request', __name__)
+requestsBP = Blueprint('request', __name__, template_folder=app.template_folder+'/requests')
 
 def selectWorkers(id):
 	workers = request.form.getlist('workers')
