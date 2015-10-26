@@ -14,8 +14,9 @@ def submitContract():
 		result = db.engine.execute(sql2, request.form.get('service_id'))
 		result = result.fetchone()
 		db.engine.execute(sql, client_username=result, worker_username=request.form.get('worker_username'), service_id=request.form.get('service_id'), time=request.form.get('time'))
-		# return render here
-	else:
+		flash('Contract created')
+		return redirect('/')
+	else
 		return redirect('/')
 	#return render_template('createContract.jade')
 
