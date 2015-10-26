@@ -4,11 +4,14 @@ block title
 	title #{title}
 
 block content
-	.text-center
-		h1 #{title}
-		p Client 
-			a(href='/profile/'+client_username) #{client_username}
-		p Worker 
-			a(hred='/profile/'+worker_username) #{worker_username}
-		p Address #{address}
-		p Money #{money}
+	.col-md-3
+	.col-md-6
+		.panel.panel-default.text-left(style="padding-left:2%")
+			h1 #{title}
+			p #{description}
+			p Client 
+				a(href='/profile/'+client_username) #{client_username}
+			p Worker 
+				a(hred='/profile/'+worker_username) #{worker_username}
+			p Address #{address}
+			p Money #{money}

@@ -6,12 +6,14 @@ block title
 block content
 	if requests
 		each res in requests
-			h2 
-				a(href='/pending/'+'#{res[0]}') #{res[2]}
-			p Client: 
-				a(href='/profile/'+res[1]) #{res[1]}
-			p #{res[3]}
-			p Time: #{res[4]}
-			p Address: #{res[5]}
+			.col-md-6
+				ul.list-group
+					h4.list-group-item.list-group-item-info
+						a(href='/pending/'+'#{res[0]}') #{res[2]}
+					p.list-group-item Client: 
+						a(href='/profile/'+res[1]) #{res[1]}
+					p.list-group-item #{res[3]}
+					p.list-group-item Time: #{res[4]}
+					p.list-group-item Address: #{res[5]}
 	else
 		p No results found
