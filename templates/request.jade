@@ -4,15 +4,23 @@ block title
 	title #{title}
 
 block content
-	.text-center
-		h1 #{title}
-		p Client 
-			a(href='/profile/'+client_username) #{client_username}
-		p #{decription}
-		p Time: #{schedule}
-		p Address #{address}
-		p Workers:
-		ul
+	.col-md-3
+	.col-md-6
+		.panel.panel-default.text-left(style="padding-left:2%")
+			h1 #{title}
+			p #{description}
+			p Client: 
+				a(href='/profile/'+client_username) #{client_username}
+			p Time: #{schedule}
+			p Address #{address}
+			p Workers:
+			ul
 			each worker in worker_names
 				li
 					a(href='/profile/'+worker[0]) #{worker[0]}
+			if session.user == client_username
+				p
+				a(href='/requests/'+id+'/edit') Edit
+				br
+				a(href='/requests/'+id+'/delete') Delete
+			p
