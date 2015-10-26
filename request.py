@@ -94,3 +94,22 @@ def viewPending():
 		results = results.fetchall()
 		return render_template('pending.jade', requests=results)
 	return redirect('/')
+
+@requestsBP.route('/requests/<service_id>/edit', methods=('GET', 'POST'))
+def editRequest(service_id):
+	if request.method=='POST':
+		sql=text('''UPDATE service_request
+					SET title=:title, description=:description, address=:address, schedule=:time
+					WHERE service_id=:id;''')
+		db.engine.execute(sql,address=request.form.get('address'), title=request.form.get('title'),\
+							description=request.form.get('description'), time=request.form.get("time"), id=service_id)
+		sql=text('''DELETE FROM worker_request WHERE service_id=:id;''')
+		db.engine.execute(sql, id=service_id)
+		selectWorkers(service_id)
+
+	sql=text('''SELECT * FROM service_request WHERE service_id=:id AND client_username=:user;''')
+	result = db.engine.execute(sql, id=service_id, user=session['user'])
+	if result:
+		user, title, description, schedule, address = getRequest(service_id)
+		return render_template('editRequest.jade', user=user, title=title, description=description, address=address, schedule=schedule)
+	return redirect('/requests/'+service_id)
