@@ -6,12 +6,16 @@ block title
 
 block content
 	//Print the user
-	h1 #{username}
-	p Email: #{email}
-	p Phone number: #{phone}
-	p Type: #{type}
-	br
-	if session.user == username
-		a(href='/profile/'+username+'/edit') Edit
-		br
-		a(href='/profile/'+username+'/delete') Delete
+	.col-md-3
+	.col-md-6
+		.panel.panel-default.text-left(style="padding-left:2%")
+			h1 #{username}
+			p Email: #{email}
+			p Phone number: #{phone}
+			p Type: #{type}
+			br
+			if session.user == username
+				a(href='/profile/'+username+'/edit') Edit
+				br
+				a(href='/profile/'+username+'/delete') Delete
+			p

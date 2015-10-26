@@ -43,7 +43,7 @@ def searchName():
 		search = request.form.get('query')
 		print(search)
 		#sql = text('''select "sp_awesome_search_service_requests"('{0}')'''.format(search))
-		sql = text('''SELECT sr.title, sr.description, sr.client_username, sr.schedule, sr.address
+		sql = text('''SELECT *
 						FROM service_request sr
 						WHERE
 							UPPER(sr.title) LIKE UPPER('%'||:search||'%') OR
