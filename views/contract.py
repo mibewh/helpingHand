@@ -16,14 +16,14 @@ def submitContract():
 		db.engine.execute(sql, client_username=result, worker_username=request.form.get('worker_username'), service_id=request.form.get('service_id'), time=request.form.get('time'))
 		flash('Contract created')
 		return redirect('/')
-	else
+	else:
 		return redirect('/')
 	#return render_template('createContract.jade')
 
 @contractBP.route('/createContract', methods=('GET', 'POST'))
 def createContract():
 	if request.method=='GET': return redirect('/')
-	sql = text('SELECT )
+	sql = text('SELECT')
 
 @contractBP.route('/contracts/<contract_id>')
 def viewContract(contract_id):
