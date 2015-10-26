@@ -1,0 +1,27 @@
+extends ./base.jade
+
+block title
+	title Create Contract
+
+block content
+	//client, worker, service_id, title, description, time
+	.text-left
+	form(method='POST', action='/createcontract')
+		.row
+			.col-md-6
+				.row
+					.col-md-12
+						h1.text-left Create Contract
+						h3 #{title}
+						p #{description}
+						p #{address}
+						input(type='hidden', name='service_id', value=service_id)
+						input(type='hidden', name='worker_username', value=worker_username)
+				.row
+					.col-md-6
+						//Time of job
+						input.form-control.input-normal(type='text', name='time', placeholder='Time', required)
+						p
+				.row
+					.col-md-2
+						button.btn.btn-primary.btn-block.btn-signin(type='submit') Submit

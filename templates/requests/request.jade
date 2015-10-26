@@ -17,11 +17,13 @@ block content
 			ul
 			each worker in worker_names
 				li
-					a(href='/profile/'+worker[0]) #{worker[0]}
-					if worker[1]
-						form(method='post', action='/createcontract')
-							input(type='hidden', name='worker', value=worker[0])
-							button.btn.btn-lg.btn-primary.btn-block(type='submit')
+					form(method='post', action='/createcontract')
+						p
+							a(href='/profile/'+worker[0]) #{worker[0]}
+							if worker[1]
+								input(type='hidden', name='worker', value=worker[0])
+								a(href='/createcontract')
+									button.btn.btn-xs.btn-primary Contract
 
 			if session.user == client_username
 				p
