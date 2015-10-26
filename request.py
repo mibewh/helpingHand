@@ -80,8 +80,8 @@ def getWorkers(id):
 def viewRequest(service_id):
 	result = getRequest(service_id)
 	names = getWorkers(service_id)
-	if(result):
-		return render_template('request.jade', client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4], worker_names=names)
+	if result:
+		return render_template('request.jade', id=service_id, client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4], worker_names=names)
 	return redirect('/')
 
 @requestsBP.route('/pending')
@@ -106,6 +106,7 @@ def editRequest(service_id):
 		sql=text('''DELETE FROM worker_request WHERE service_id=:id;''')
 		db.engine.execute(sql, id=service_id)
 		selectWorkers(service_id)
+		return redirect('/requests/'+service_id)
 
 	sql=text('''SELECT * FROM service_request WHERE service_id=:id AND client_username=:user;''')
 	result = db.engine.execute(sql, id=service_id, user=session['user'])
@@ -116,3 +117,18 @@ def editRequest(service_id):
 		worker_names = [res[0] for res in results]
 		return render_template('editRequest.jade', user=user, title=title, description=description, address=address, schedule=schedule, id=service_id, workers=worker_names)
 	return redirect('/requests/'+service_id)
+
+@requestsBP.route('/requests/<service_id>/delete')
+def deleteRequest(service_id):
+	if session.get('user'):
+		#Verify that the request to delete is that user's request
+		sql = text('''SELECT * FROM service_request WHERE service_id=:id AND client_username=:user''')
+		result = db.engine.execute(sql, id=service_id, user=session['user'])
+		result = [r[0] for r in result]
+		if result == []: return redirect('/')
+		#Delete the entry
+		sql = text('''DELETE FROM service_request WHERE service_id=:id''')
+		db.engine.execute(sql, id=service_id)
+		return redirect('/requests')
+	else:
+		return redirect('/')

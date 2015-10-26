@@ -5,7 +5,7 @@ block title
 
 block content
 	.text-left
-	form(method='POST', action='/create')
+	form(method='POST', action='/requests/'+id+'/edit')
 		.row
 			.col-md-6
 				.row
@@ -18,7 +18,9 @@ block content
 						p
 				.row
 					.col-md-12
-						textarea.form-control(name='description', placeholder='Description', rows='5', value=description)
+						//Leave in the random caret
+						textarea.form-control(name='description', placeholder='Description', rows='5')< 
+							| #{description}
 						p
 						input.form-control(type='text', name='address', placeholder='Address', value=address)
 						p
