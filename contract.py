@@ -7,8 +7,8 @@ contractBP = Blueprint('contract', __name__)
 @contractBP.route('/contracts/<contract_id>')
 def viewContract(contract_id):
 	sql = text('''SELECT client_username, worker_username, address, start_time, payment
-								FROM contract
-								WHERE contract_id=:contract_id''')
+				  FROM contract
+				  WHERE contract_id=:contract_id''')
 	result = db.engine.execute(sql, contract_id=contract_id)
 	result = result.fetchone()
 	if result:
