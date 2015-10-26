@@ -8,5 +8,8 @@ block content
 			h4
 				i #{msg}
 	else
-		h4
-			i Please create an account or login to begin using the service.
+		if session.user
+			p
+		else
+			h4
+				i Please create an account or login to begin using the service.

@@ -16,13 +16,18 @@ block content
 		.row
 			.col-md-5
 			.col-md-2
+				p
 				button.btn.btn-lg.btn-primary.btn-block.btn-signin(type='submit') Submit
 			.col-md-5
 		.row
+			h2
+		.row.col-md-12
 			if results
 				each res in results
-					h2 #{res[0]}
-					p #{res[1]}
-					p Client: #{res[2]}
-					p Time: #{res[3]}
-					p Address: #{res[4]}
+					.col-md-6
+						ul.list-group
+							h4.list-group-item
+								a(href='/requests/'+'#{res[0]}') #{res[2]}
+							p.list-group-item #{res[3]}
+							p.list-group-item Time: #{res[4]}
+							p.list-group-item Address: #{res[5]}
