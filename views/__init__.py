@@ -2,7 +2,7 @@ from flask import Flask, render_template, g, redirect, request, session, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../templates')
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 app.debug=True
 app.secret_key = 'this is soooooo secret right?'

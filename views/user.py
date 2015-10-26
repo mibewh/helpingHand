@@ -1,8 +1,9 @@
 from flask import Flask, render_template, g, redirect, request, session, flash, Blueprint
 from sqlalchemy.sql import text
-from main import db
+from . import db, app
 
-users = Blueprint('users', __name__)
+users = Blueprint('users', __name__, template_folder=app.template_folder+'/users')
+print(users.template_folder)
 
 def login(username, password):
 	#check if user, password combo is in the database
