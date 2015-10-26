@@ -111,5 +111,5 @@ def editRequest(service_id):
 	result = db.engine.execute(sql, id=service_id, user=session['user'])
 	if result:
 		user, title, description, schedule, address = getRequest(service_id)
-		return render_template('editRequest.jade', user=user, title=title, description=description, address=address, schedule=schedule)
+		return render_template('editRequest.jade', user=user, title=title, description=description, address=address, schedule=schedule, id=service_id)
 	return redirect('/requests/'+service_id)
