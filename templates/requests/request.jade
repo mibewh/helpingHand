@@ -17,11 +17,12 @@ block content
 			ul
 			each worker in worker_names
 				li
-					form(method='post', action='/createcontract')
+					form(method='post', action='/createContract')
 						p
 							a(href='/profile/'+worker[0]) #{worker[0]}
 							if worker[1]
 								input(type='hidden', name='worker', value=worker[0])
+								input(type='hidden', name='service_id', value=id)
 								a(href='/createcontract')
 									button.btn.btn-xs.btn-primary Contract
 
