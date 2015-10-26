@@ -18,6 +18,11 @@ block content
 			each worker in worker_names
 				li
 					a(href='/profile/'+worker[0]) #{worker[0]}
+					if worker[1]
+						form(method='post', action='/createcontract')
+							input(type='hidden', name='worker', value=worker[0])
+							button.btn.btn-lg.btn-primary.btn-block(type='submit')
+
 			if session.user == client_username
 				p
 				a(href='/requests/'+id+'/edit') Edit
