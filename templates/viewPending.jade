@@ -1,0 +1,17 @@
+extends ./base.jade
+
+block title
+	title Pending
+
+block content
+	if requests
+		each res in requests
+			h2 
+				a(href='/pending/'+'#{res[0]}') #{res[2]}
+			p Client: 
+				a(href='/profile/'+res[1]) #{res[1]}
+			p #{res[3]}
+			p Time: #{res[4]}
+			p Address: #{res[5]}
+	else
+		p No results found
