@@ -66,14 +66,14 @@ def viewRequests():
 	else:
 		return redirect('/')
 
-def getRequest(id):
+def getRequest(service_id):
 	sql=text('''SELECT client_username, title, description, schedule, address FROM service_request WHERE service_id=:id;''')
-	result=db.engine.execute(sql, id=id)
+	result=db.engine.execute(sql, service_id=id)
 	return result.fetchone()
 
-def getWorkers(id):
-	sql=text('''SELECT worker_username FROM worker_request WHERE service_id=:id;''')
-	result=db.engine.execute(sql, id=id)
+def getWorkers(service_id):
+	sql=text('''SELECT worker_username, interested FROM worker_request WHERE service_id=:id;''')
+	result=db.engine.execute(sql, service_id=id)
 	return result.fetchall()
 
 @requestsBP.route('/requests/<service_id>')
@@ -154,3 +154,4 @@ def deleteRequest(service_id):
 		return redirect('/requests')
 	else:
 		return redirect('/')
+
