@@ -1,13 +1,14 @@
 extends ./base.jade
 
 block title
-	title Contract #{results[0]}
+	title Contract #{result[0]}
 
 block content
 	.col-md-3
 	.col-md-6
 		.panel.panel-default.text-left(style="padding-left:2%")
-			h1 Contract #{results[0]}
+			h1 #{result[0]}
+			p Client:
 			p Worker: 
-				a(hred='/profile/'+results[1]) #{results[1]}
-			p Time: #{results[3]}
+				a(href='/profile/'+result[1]) #{result[1]}
+			p Time: #{result[3]}
