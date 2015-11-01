@@ -7,7 +7,8 @@ block content
 	.col-md-3
 	.col-md-6
 		.panel.panel-default.text-left(style="padding-left:2%")
-			h1 Contract #{result[0]}
+			h1 #{result[0]}
+			p Client:
 			p Worker: 
-				a(hred='/profile/'+result[1]) #{result[1]}
+				a(href='/profile/'+result[1]) #{result[1]}
 			p Time: #{result[3]}
