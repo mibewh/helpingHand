@@ -14,7 +14,7 @@ def submitContract():
 			worker_username=request.form.get('worker_username'), \
 			service_id=request.form.get('service_id'), \
 			time=request.form.get('time'))
-		flash('Contract created')
+		flash('Contract created, awaiting worker acceptance')
 		return redirect('/')
 	else:
 		return redirect('/')
@@ -51,4 +51,47 @@ def viewContracts():
 		results = results.fetchall()
 		return render_template('viewContracts.jade', results=results)
 	else:
+		return redirect('/')
+
+@contractBP.route('/pendingContracts')
+def viewPendingContracts():
+	user = session.get('user')
+	if user:
+		sql=text('''SELECT * FROM contract c, service_request sr WHERE c.service_id=sr.service_id AND (client_username=:username OR worker_username=:username) AND contract_status='pending';''')
+		results = db.enginge.execute(sql, username=user)
+		results = results.fetchall()
+		return render_template('viewPendingContracts.jade', results=results)
+	else:
+		return redirect('/')
+
+@contractBP.route('/pendingContracts/<contract_id>')
+def viewPendingContract(contract_id):
+	sql = text('''SELECT * FROM contract WHERE contract_id=:contract_id''')
+	result = db.engine.execute(sql, contract_id=contract_id)
+	result = result.fetchone()
+	if result:
+		return render_template('pendingContract.jade',results=results)
+	return redirect('/')
+
+@contractBP.route('/contracts/<id>/accept')
+def workerAcceptContract(id):
+	if session.get('user') and session['type'] == 'worker':
+		sql = text('''UPDATE contract SET contract_status='accepted' WHERE contract_id=:id;''')
+		result = db.engine.execute(sql, id=contract_id)
+		return redirect('/contracts')
+	else
+		return redirect('/')
+		
+@contractBP.route('/contracts/<id>/deny')
+def workerDenyContract(id):
+	if session.get('user') and session['type'] == 'worker':
+		sql = text('''SELECT service_id FROM contract WHERE contract_id=:id''')
+		result = db.engine.execute(sql, id=contract_id)
+		service_id = result.fetchone()[0]
+		sql = text('''UPDATE service_request SET contracted=FALSE WHERE service_id=:service_id''')
+		db.engine.execute(sql, service_id=service_id)
+		sql = text('''DELETE FROM contract WHERE contract_id=:id;''')
+		result = db.engine.execute(sql, id=contract_id)
+		return redirect('/contracts')
+	else
 		return redirect('/')
