@@ -17,6 +17,7 @@ from contract import contractBP
 app.register_blueprint(users)
 app.register_blueprint(requestsBP)
 app.register_blueprint(contractBP)
+app.register_blueprint(rating)
 
 @app.route('/')
 def index():
