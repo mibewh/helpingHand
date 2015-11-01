@@ -65,13 +65,35 @@ def workerAcceptContract(id):
 @contractBP.route('/contracts/<id>/deny')
 def workerDenyContract(id):
 	if session.get('user') and session['type'] == 'worker':
-		sql = text('''SELECT service_id FROM contract WHERE contract_id=:id''')
+		sql = text('''SELECT service_id FROM contract WHERE contract_id=:id;''')
 		result = db.engine.execute(sql, id=contract_id)
 		service_id = result.fetchone()[0]
-		sql = text('''UPDATE service_request SET contracted=FALSE WHERE service_id=:service_id''')
+		sql = text('''UPDATE service_request SET contracted=FALSE WHERE service_id=:service_id;''')
 		db.engine.execute(sql, service_id=service_id)
 		sql = text('''DELETE FROM contract WHERE contract_id=:id;''')
 		result = db.engine.execute(sql, id=contract_id)
 		return redirect('/contracts')
+	else
+		return redirect('/')
+
+@contractBP.route('/contracts/<id>/complete')
+def completeContract(id):
+	if session.get('user') and session['type'] == 'client':
+		#Check if this user is the owner of the request
+		sql = text('''SELECT client_username FROM contract, service_request
+					  WHERE contract.service_id=service_request.service_id
+					  AND contract_id=:id;''')
+		result = db.engine.execute(sql, id=id)
+		contract_client = result.fetchone()[0]
+		if contract_client == session.get('user'):
+			#complete the contract
+			sql = text('''UPDATE contract SET contract_status='complete' WHERE contract_id=:id;''')
+			db.engine.execute(sql, id=id)
+			#change this to a redirect to the ratings and review page
+			flash('Contract marked as completed')
+			return redirect('/')
+		else:
+			return redirect('/')
+	return redirect('/')
 	else:
 		return redirect('/')
