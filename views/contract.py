@@ -73,7 +73,7 @@ def workerDenyContract(id):
 		sql = text('''DELETE FROM contract WHERE contract_id=:id;''')
 		result = db.engine.execute(sql, id=contract_id)
 		return redirect('/contracts')
-	else
+	else:
 		return redirect('/')
 
 @contractBP.route('/contracts/<id>/complete')
@@ -94,6 +94,5 @@ def completeContract(id):
 			return redirect('/')
 		else:
 			return redirect('/')
-	return redirect('/')
 	else:
 		return redirect('/')
