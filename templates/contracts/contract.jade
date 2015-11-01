@@ -8,8 +8,9 @@ block content
 	.col-md-6
 		.panel.panel-default.text-left(style="padding-left:2%")
 			h1 #{result[0]}
-			p Client:
+			p Client: 
 				a(href='/profile/'+result[1]) #{result[1]}
 			p Worker: 
 				a(href='/profile/'+result[2]) #{result[2]}
 			p Time: #{result[3]}
+			p Status: #{result[4]}
