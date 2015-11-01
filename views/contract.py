@@ -46,7 +46,7 @@ def viewContract(contract_id):
 @contractBP.route('/contracts')
 def viewContracts():
 	if session.get('user'):
-		sql=text('''SELECT sr.title, sr.client_username, c.worker_username, c.time FROM contract c, service_request sr WHERE c.service_id=sr.service_id AND (sr.client_username=:username OR c.worker_username=:username);''')
+		sql=text('''SELECT sr.title, sr.client_username, c.worker_username, c.time, c.contract_id FROM contract c, service_request sr WHERE c.service_id=sr.service_id AND (sr.client_username=:username OR c.worker_username=:username);''')
 		results = db.engine.execute(sql, username=session.get('user'))
 		results = results.fetchall()
 		return render_template('viewContracts.jade', results=results)
