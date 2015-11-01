@@ -6,20 +6,23 @@ block title
 block content
 	if requests
 		each res in requests
-			.col-md-6
-				ul.list-group
-					h4.list-group-item.list-group-item-info
-						a(href='/pending/'+'#{res[0]}') #{res[2]}
-					p.list-group-item Client: 
-						a(href='/profile/'+res[1]) #{res[1]}
-					p.list-group-item #{res[3]}
-					p.list-group-item Time: #{res[4]}
-					p.list-group-item Address: #{res[5]}
-					if res[6]
-						form(method='post', action='/pending/'+'#{res[0]}'+'/accept')
-							button.btn.btn-lg.btn-danger.btn-block(type='submit') Not Interested
-					else
-						form(method='post', action='/pending/'+'#{res[0]}'+'/accept')
-							button.btn.btn-lg.btn-success.btn-block(type='submit') Interested
+			if res[7]
+				//Nothing
+			else
+				.col-md-6
+					ul.list-group
+						h4.list-group-item.list-group-item-info
+							a(href='/pending/'+'#{res[0]}') #{res[2]}
+						p.list-group-item Client: 
+							a(href='/profile/'+res[1]) #{res[1]}
+						p.list-group-item #{res[3]}
+						p.list-group-item Time: #{res[4]}
+						p.list-group-item Address: #{res[5]}
+						if res[6]
+							form(method='post', action='/pending/'+'#{res[0]}'+'/accept')
+								button.btn.btn-lg.btn-success.btn-block(type='submit') Set Not Interested
+						else
+							form(method='post', action='/pending/'+'#{res[0]}'+'/accept')
+								button.btn.btn-lg.btn-danger.btn-block(type='submit') Set Interested
 	else
 		p No results found

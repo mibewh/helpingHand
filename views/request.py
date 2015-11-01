@@ -87,7 +87,7 @@ def viewRequest(service_id):
 @requestsBP.route('/pending')
 def viewPendings():
 	if session.get('user') and session['type'] == 'worker':
-		sql=text('''SELECT sr.service_id, client_username, title, description, schedule, address, interested
+		sql=text('''SELECT sr.service_id, client_username, title, description, schedule, address, interested, contracted
 								FROM service_request sr, worker_request wr, worker w
 								WHERE sr.service_id=wr.service_id AND wr.worker_username=w.worker_username AND w.worker_username=:username''')
 		results = db.engine.execute(sql, username=session.get('user'))
