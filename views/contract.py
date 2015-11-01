@@ -74,7 +74,7 @@ def viewContracts():
 def workerAcceptContract(id):
 	if session.get('user') and session['type'] == 'worker':
 		sql = text('''UPDATE contract SET contract_status='accepted' WHERE contract_id=:id;''')
-		result = db.engine.execute(sql, id=contract_id)
+		result = db.engine.execute(sql, id=id)
 		return redirect('/contracts')
 	else:
 		return redirect('/')
@@ -83,12 +83,12 @@ def workerAcceptContract(id):
 def workerDenyContract(id):
 	if session.get('user') and session['type'] == 'worker':
 		sql = text('''SELECT service_id FROM contract WHERE contract_id=:id;''')
-		result = db.engine.execute(sql, id=contract_id)
+		result = db.engine.execute(sql, id=id)
 		service_id = result.fetchone()[0]
 		sql = text('''UPDATE service_request SET contracted=FALSE WHERE service_id=:service_id;''')
 		db.engine.execute(sql, service_id=service_id)
 		sql = text('''DELETE FROM contract WHERE contract_id=:id;''')
-		result = db.engine.execute(sql, id=contract_id)
+		result = db.engine.execute(sql, id=id)
 		return redirect('/contracts')
 	else:
 		return redirect('/')
