@@ -34,7 +34,13 @@ def createContract():
 
 @contractBP.route('/contracts/<contract_id>')
 def viewContract(contract_id):
-	sql = text('''SELECT sr.title, sr.client_username, c.worker_username, c.time, c.contract_status
+	sql = text('''SELECT
+					sr.title, 
+					sr.description, 
+					sr.client_username, 
+					c.worker_username,
+					c.time, 
+					c.contract_status
 				  FROM contract c, service_request sr
 				  WHERE c.service_id=sr.service_id AND c.contract_id=:contract_id''')
 	result = db.engine.execute(sql, contract_id=contract_id)
@@ -46,7 +52,14 @@ def viewContract(contract_id):
 @contractBP.route('/contracts')
 def viewContracts():
 	if session.get('user'):
-		sql=text('''SELECT sr.title, sr.client_username, c.worker_username, c.time, c.contract_id, c.contract_status
+		sql=text('''SELECT
+						c.contract_id, 
+						sr.title, 
+						sr.description, 
+						sr.client_username, 
+						c.worker_username, 
+						c.time,
+						c.contract_status
 					FROM contract c, service_request sr
 					WHERE c.service_id=sr.service_id AND (sr.client_username=:username OR c.worker_username=:username);''')
 		results = db.engine.execute(sql, username=session.get('user'))
