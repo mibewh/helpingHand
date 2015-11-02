@@ -104,7 +104,8 @@ def completeContract(id):
 		contract_client = result.fetchone()[0]
 		if contract_client == session.get('user'):
 			#complete the contract
-			sql = text('''UPDATE contract SET contract_status='complete' WHERE contract_id=:id;''')
+			sql = text('''UPDATE contract SET contract_status='finished' 
+						  WHERE contract_id=:id;''')
 			db.engine.execute(sql, id=id)
 			#change this to a redirect to the ratings and review page
 			flash('Contract marked as completed')

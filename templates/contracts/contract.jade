@@ -17,8 +17,12 @@ block content
 			p Time: #{result[4]}
 			p Status: #{result[5]}
 		if result[5] == 'pending'
-			.col-md-6
-				a.btn.btn-lg.btn-success.btn-block(href='/contracts/'+id+'/accept') Accept
-			.col-md-6
-				a.btn.btn-lg.btn-danger.btn-block(href='/contracts/'+id+'/deny') Deny
+			if session.user == result[3]
+				.col-md-6
+					a.btn.btn-lg.btn-success.btn-block(href='/contracts/'+id+'/accept') Accept
+				.col-md-6
+					a.btn.btn-lg.btn-danger.btn-block(href='/contracts/'+id+'/deny') Deny
+		if result[5] =='accepted'
+			if session.user == result[2]
+				a.btn.btn-lg.btn-primary.btn-block(href='/contracts/'+id+'/complete') Complete
 	.col-md-3
