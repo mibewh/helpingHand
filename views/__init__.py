@@ -14,10 +14,11 @@ db.engine.connect()
 from user import users
 from request import requestsBP
 from contract import contractBP
+from rating import ratings
 app.register_blueprint(users)
 app.register_blueprint(requestsBP)
 app.register_blueprint(contractBP)
-app.register_blueprint(rating)
+app.register_blueprint(ratings)
 
 @app.route('/')
 def index():

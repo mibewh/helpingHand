@@ -62,6 +62,7 @@ def viewRequests():
 		sql = text('''SELECT * FROM service_request WHERE client_username=:username;''')
 		results = db.engine.execute(sql, username=session.get('user'))
 		results = results.fetchall()
+		results = [r for r in results if r[6]==False]
 		return render_template('viewRequests.jade', requests=results)
 	else:
 		return redirect('/')

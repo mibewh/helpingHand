@@ -13,3 +13,9 @@ block content
 			p Worker: 
 				a(href='/profile/'+result[2]) #{result[2]}
 			p Time: #{result[3]}
+		//if status? = 
+		.col-md-6
+			a.btn.btn-lg.btn-success.btn-block(href='/contracts/'+id+'/accept') Accept
+		.col-md-6
+			a.btn.btn-lg.btn-danger.btn-block(href='/contracts/'+id+'/deny') Deny
+	.col-md-3

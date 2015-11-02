@@ -14,6 +14,8 @@ def submitContract():
 			worker_username=request.form.get('worker_username'), \
 			service_id=request.form.get('service_id'), \
 			time=request.form.get('time'))
+		sql = text('''UPDATE service_request SET contracted=TRUE WHERE service_id=:service_id''')
+		db.engine.execute(sql, service_id=request.form.get('service_id'))
 		flash('Contract created, awaiting worker acceptance')
 		return redirect('/')
 	else:
@@ -40,7 +42,7 @@ def viewContract(contract_id):
 	result = db.engine.execute(sql, contract_id=contract_id)
 	result = result.fetchone()
 	if result:
-		return render_template('contract.jade', result=result)
+		return render_template('contract.jade', result=result, id=contract_id)
 	return redirect('/')
 
 @contractBP.route('/contracts')
