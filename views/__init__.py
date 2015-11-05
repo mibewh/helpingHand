@@ -8,6 +8,7 @@ app.debug=True
 app.secret_key = 'this is soooooo secret right?'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iokqwvbpdqkbsb:kVe-Z6R1qqoAXF2uqtvvNW_kYY@ec2-54-204-15-48.compute-1.amazonaws.com:5432/d983rtid8h2rk'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 db.engine.connect() 
 
