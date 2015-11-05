@@ -108,8 +108,7 @@ def completeContract(id):
 						  WHERE contract_id=:id;''')
 			db.engine.execute(sql, id=id)
 			#change this to a redirect to the ratings and review page
-			flash('Contract marked as completed')
-			return redirect('/contracnt/<id>/rating')
+			return redirect('/contracts/'+id+'/rating')
 		else:
 			return redirect('/')
 	else:

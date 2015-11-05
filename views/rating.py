@@ -10,8 +10,8 @@ def rateWorker(contract_id):
 		sql=text('''SELECT worker_username, contract_status, rating FROM contract WHERE contract_id=:id;''')
 		contract = db.engine.execute(sql, id=contract_id)
 		contract=contract.fetchone()
-		if(contract[1]=="completed" and contract[2]==None):
-			return render_template('rating.jade', name=worker_username, id=contract_id)
+		if(contract[1]=="finished" and contract[2]==None):
+			return render_template('rating.jade', name=contract[0], id=contract_id)
 		else:
 			return redirect('/')
 	if request.method=="POST":
