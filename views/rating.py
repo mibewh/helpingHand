@@ -15,7 +15,7 @@ def rateWorker(contract_id):
 		else:
 			return redirect('/')
 	if request.method=="POST":
-		sql=text('''INSERT INTO table (:rating, :review) VALUES (rating, review);''')
+		sql=text('''INSERT INTO contract (rating, review) VALUES (:rating, :review);''')
 		result=db.engine.execute(sql, rating=request.form.get("rating"), review=request.form.get("review"))
 		flash("Rating Submitted")
 		return redirect('/')		
