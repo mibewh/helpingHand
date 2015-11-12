@@ -16,10 +16,12 @@ from user import users
 from request import requestsBP
 from contract import contractBP
 from rating import ratings
+from notify import notifications
 app.register_blueprint(users)
 app.register_blueprint(requestsBP)
 app.register_blueprint(contractBP)
 app.register_blueprint(ratings)
+app.register_blueprint(notifications)
 
 @app.route('/')
 def index():
