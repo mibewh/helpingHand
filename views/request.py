@@ -98,11 +98,11 @@ def viewPendings():
 
 @requestsBP.route('/pending/<service_id>')
 def viewPending(service_id):
-	sql=text('''SELECT client_username, title, description, schedule, address FROM service_request WHERE service_id=:id;''')
+	sql=text('''SELECT client_username, title, description, schedule, address, interested FROM service_request sr, worker_request wr WHERE sr.service_id=:id AND sr.service_id=wr.service_id;''')
 	results=db.engine.execute(sql, id=service_id)
 	result = results.fetchone()
 	if result:
-		return render_template('pending.jade', id=service_id, client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4])
+		return render_template('pending.jade', id=service_id, client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4], interested=result[5])
 	return redirect('/')
 
 @requestsBP.route('/pending/<service_id>/accept', methods=('GET', 'POST'))

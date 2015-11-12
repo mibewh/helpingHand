@@ -13,3 +13,9 @@ block content
 				a(href='/profile/'+client_username) #{client_username}
 			p Time: #{schedule}
 			p Address #{address}
+		if interested
+			form(method='post', action='/pending/'+id+'/accept')
+				button.btn.btn-lg.btn-success.btn-block(type='submit') Set Not Interested
+		else
+			form(method='post', action='/pending/'+id+'/accept')
+				button.btn.btn-lg.btn-danger.btn-block(type='submit') Set Interested
