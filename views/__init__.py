@@ -30,3 +30,12 @@ def index():
 @app.route('/create', methods=('GET', 'POST'))
 def create():
 	return render_template('create.jade')
+
+@app.before_request
+def before_request():
+	if session.get('user'):
+		sql = text('''SELECT COUNT(notification_id) FROM notification
+					  WHERE name=:user AND viewed=FALSE;''')
+		results = db.engine.execute(sql, user=session.get('user'))
+		results = results.fetchone()
+		session['notifications'] = results[0]

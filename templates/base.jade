@@ -3,6 +3,7 @@ html(lang='en')
 	head
 		link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css')
 		link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css')
+		link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-glyphicons.css')
 		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
 		script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')
 		block title
@@ -36,6 +37,9 @@ html(lang='en')
 					ul.nav.navbar-nav.navbar-right
 						//Display Login, or profile stuff if already logged in
 						if session.user
+							li
+								a(href='/notifications') Notifications 
+									span.badge #{session.notifications}
 							li
 								- var url = '/profile/'+session.user
 								a(href=url) #{session.user}

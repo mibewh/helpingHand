@@ -2,6 +2,7 @@ extends ./base.jade
 
 block content
 	h1 Welcome to Helping Hand!
+	
 	- var messages = get_flashed_messages()
 	if messages
 		each msg in messages

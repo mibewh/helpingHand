@@ -7,8 +7,8 @@ notifications = Blueprint('notifications', __name__, template_folder=app.templat
 def pushNotification(name, message, link):
 	#Insert a notification for a given person, with a message and a link
 	sql = text('''INSERT INTO notification
-				  (name, message, link)
-				  VALUES (:name, :message, :link);''')
+				  (name, message, link, time)
+				  VALUES (:name, :message, :link, NOW());''')
 	db.engine.execute(sql, name=name, message=message, link=link)
 
 @notifications.route('/notifications')
@@ -20,12 +20,12 @@ def viewNotifications():
 		results = db.engine.execute(sql, user=session.get('user'))
 		newNotifications = results.fetchall()
 		#Get all old notifications
-		sql = text('''SELECT name, message, link, time FROM notification
+		sql = text('''SELECT message, link, time FROM notification
 					  WHERE name=:user AND viewed=TRUE''')
 		results = db.engine.execute(sql, user=session.get('user'))
 		oldNotifications = results.fetchall()
 		#Set new notifications as viewed now
-		sql = text('''UPDATE notifications SET viewed=TRUE WHERE name=:user;''')
+		sql = text('''UPDATE notification SET viewed=TRUE WHERE name=:user;''')
 		db.engine.execute(sql, user=session.get('user'))
 
 		return render_template('viewNotifications.jade', unviewed=newNotifications, viewed=oldNotifications)
