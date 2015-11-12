@@ -4,18 +4,53 @@ block title
 	title Contracts
 
 block content
-	if results
-		each res in results
-			.col-md-6
-				ul.list-group
-					h4.list-group-item.list-group-item-info
-						a(href='/contracts/'+'#{res[0]}') #{res[1]}
-					p.list-group-item #{res[2]}
-					p.list-group-item Client: 
-						a(href='/profile/'+'#{res[3]}') #{res[3]}
-					p.list-group-item Worker: 
-						a(href='/profile/'+'#{res[4]}') #{res[4]}
-					p.list-group-item Start Time: #{res[5]}
-					p.list-group-item Status: #{res[6]}
-	else
-		p No results found	
+	.row
+		if accepted
+			h2 Accepted Contracts
+			each res in accepted
+				.col-md-6
+					ul.list-group
+						h4.list-group-item.list-group-item-info
+							a(href='/contracts/'+'#{res[0]}') #{res[1]}
+						p.list-group-item #{res[2]}
+						p.list-group-item Client: 
+							a(href='/profile/'+'#{res[3]}') #{res[3]}
+						p.list-group-item Worker: 
+							a(href='/profile/'+'#{res[4]}') #{res[4]}
+						p.list-group-item Start Time: #{res[5]}
+						p.list-group-item Status: #{res[6]}
+	.row
+		if pending
+			h2 Received Contracts
+			each res in pending
+				.col-md-6
+					ul.list-group
+						h4.list-group-item.list-group-item-info
+							a(href='/contracts/'+'#{res[0]}') #{res[1]}
+						p.list-group-item #{res[2]}
+						p.list-group-item Client: 
+							a(href='/profile/'+'#{res[3]}') #{res[3]}
+						p.list-group-item Worker: 
+							a(href='/profile/'+'#{res[4]}') #{res[4]}
+						p.list-group-item Start Time: #{res[5]}
+						p.list-group-item Status: #{res[6]}
+						.row
+							.col-md-6
+								a.btn.btn-lg.btn-success.btn-block(href='/contracts/'+'#{res[0]}'+'/accept') Accept
+							.col-md-6
+								a.btn.btn-lg.btn-danger.btn-block(href='/contracts/'+'#{res[0]}'+'/deny') Deny
+	.row
+		if finished
+			h2 Finished Contracts
+			each res in finished
+				.col-md-6
+					ul.list-group
+						h4.list-group-item.list-group-item-info
+							a(href='/contracts/'+'#{res[0]}') #{res[1]}
+						p.list-group-item #{res[2]}
+						p.list-group-item Client: 
+							a(href='/profile/'+'#{res[3]}') #{res[3]}
+						p.list-group-item Worker: 
+							a(href='/profile/'+'#{res[4]}') #{res[4]}
+						p.list-group-item Start Time: #{res[5]}
+						p.list-group-item Status: #{res[6]}
