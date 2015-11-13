@@ -1,6 +1,7 @@
 from flask import Flask, render_template, g, redirect, request, session, flash, Blueprint
 from sqlalchemy.sql import text
 from . import db, app
+from notify import pushNotification
 
 contractBP = Blueprint('contract', __name__, template_folder=app.template_folder+'/contracts')
 
@@ -100,17 +101,19 @@ def workerDenyContract(id):
 def completeContract(id):
 	if session.get('user') and session['type'] == 'client':
 		#Check if this user is the owner of the request
-		sql = text('''SELECT client_username FROM contract, service_request
+		sql = text('''SELECT client_username, worker_username FROM contract, service_request
 					  WHERE contract.service_id=service_request.service_id
 					  AND contract_id=:id;''')
 		result = db.engine.execute(sql, id=id)
-		contract_client = result.fetchone()[0]
+		result = result.fetchone()
+		contract_client = result[0]
+		contract_worker = result[1]
 		if contract_client == session.get('user'):
 			#complete the contract
 			sql = text('''UPDATE contract SET contract_status='finished' 
 						  WHERE contract_id=:id;''')
 			db.engine.execute(sql, id=id)
-			#change this to a redirect to the ratings and review page
+			pushNotification(contract_worker, 'Contract with '+contract_client+' complete', '/contracts/'+str(id))
 			return redirect('/contracts/'+id+'/rating')
 		else:
 			return redirect('/')

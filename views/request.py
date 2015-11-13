@@ -118,10 +118,11 @@ def interestRequest(service_id):
 		sql = text('UPDATE worker_request SET interested=:interested WHERE service_id=:id AND worker_username=:user;')
 		db.engine.execute(sql, interested=interested, id=service_id, user=session['user'])
 		#Notify the user
-		sql = text('''SELECT client_username FROM service_request WHERE service_id=:id''')
-		results = db.engine.execute(sql, id=service_id)
-		name = results.fetchone()[0]
-		pushNotification(name, session.get('user')+' is interested in your job', '/requests/'+str(service_id))
+		if interested:
+			sql = text('''SELECT client_username FROM service_request WHERE service_id=:id''')
+			results = db.engine.execute(sql, id=service_id)
+			name = results.fetchone()[0]
+			pushNotification(name, session.get('user')+' is interested in your job', '/requests/'+str(service_id))
 		return redirect('/pending')
 	else: return redirect('/')
 
