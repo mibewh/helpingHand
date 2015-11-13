@@ -1,6 +1,7 @@
 from flask import Flask, render_template, g, redirect, request, session, flash, Blueprint
 from sqlalchemy.sql import text
 from . import db, app
+from notify import pushNotification
 
 requestsBP = Blueprint('request', __name__, template_folder=app.template_folder+'/requests')
 
@@ -9,6 +10,7 @@ def selectWorkers(id):
 	for user in workers:
 		sql = text('''INSERT INTO worker_request (service_id, worker_username) VALUES (:id, :user);''')
 		db.engine.execute(sql, id=id, user=user)
+		pushNotification(user, 'You have been requested for a job', '/pending/'+str(id))
 
 @requestsBP.route('/create', methods=('GET', 'POST'))
 def create_service_request():
@@ -112,8 +114,14 @@ def interestRequest(service_id):
 		sql = text('''SELECT interested FROM worker_request WHERE service_id=:id AND worker_username=:user;''')
 		results = db.engine.execute(sql, id=service_id, user=session['user'])
 		interested = results.fetchone()[0]
+		interested = not interested; #change interest
 		sql = text('UPDATE worker_request SET interested=:interested WHERE service_id=:id AND worker_username=:user;')
-		db.engine.execute(sql, interested = not interested, id=service_id, user=session['user'])
+		db.engine.execute(sql, interested=interested, id=service_id, user=session['user'])
+		#Notify the user
+		sql = text('''SELECT client_username FROM service_request WHERE service_id=:id''')
+		results = db.engine.execute(sql, id=service_id)
+		name = results.fetchone()[0]
+		pushNotification(name, session.get('user')+' is interested in your job', '/requests/'+str(service_id))
 		return redirect('/pending')
 	else: return redirect('/')
 
