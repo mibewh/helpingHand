@@ -1,5 +1,6 @@
 from flask import Flask, render_template, g, redirect, request, session, flash, Blueprint
 from sqlalchemy.sql import text
+from notify import pushNotification
 from . import db, app
 
 contractBP = Blueprint('contract', __name__, template_folder=app.template_folder+'/contracts')
@@ -7,15 +8,32 @@ contractBP = Blueprint('contract', __name__, template_folder=app.template_folder
 @contractBP.route('/submitContract', methods=('GET', 'POST'))
 def submitContract():
 	if request.method=='POST':
+		# move to after table insertion when debugging
 		sql = text('''INSERT INTO contract
 					  (worker_username, service_id, time, contract_status)
 					  VALUES (:worker_username, :service_id, :time, 'pending');''')
-		db.engine.execute(sql,
+		db.engine.execute(sql, \
 			worker_username=request.form.get('worker_username'), \
 			service_id=request.form.get('service_id'), \
 			time=request.form.get('time'))
 		sql = text('''UPDATE service_request SET contracted=TRUE WHERE service_id=:service_id''')
 		db.engine.execute(sql, service_id=request.form.get('service_id'))
+
+		sql = text('''SELECT contract_id, client_username
+						FROM contract c, service_request sr
+ 						WHERE
+							c.service_id=sr.service_id AND
+							sr.service_id=:service_id AND
+							worker_username=:worker_username;''')
+		result = db.engine.execute(sql, \
+			service_id=request.form.get('service_id'), \
+			worker_username=request.form.get('worker_username'))
+		result = result.fetchone()
+		pushNotification(\
+			name=request.form.get('worker_username'), \
+			message='You\'ve received a contract from '+result[1], \
+			link='/contracts/'+str(result[0]))
+
 		flash('Contract created, awaiting worker acceptance')
 		return redirect('/')
 	else:
@@ -77,7 +95,19 @@ def viewContracts():
 def workerAcceptContract(id):
 	if session.get('user') and session['type'] == 'worker':
 		sql = text('''UPDATE contract SET contract_status='accepted' WHERE contract_id=:id;''')
+		db.engine.execute(sql, id=id)
+
+		sql = text('''SELECT client_username, worker_username
+						FROM service_request sr, contract c
+						WHERE sr.service_id=c.service_id AND
+							contract_id=:id''')
 		result = db.engine.execute(sql, id=id)
+		result = result.fetchone()
+		pushNotification( \
+			name=result[0], \
+			message=result[1]+' has accepted your contract', \
+			link='/contracts/'+str(id))
+
 		return redirect('/contracts')
 	else:
 		return redirect('/')
@@ -91,7 +121,19 @@ def workerDenyContract(id):
 		sql = text('''UPDATE service_request SET contracted=FALSE WHERE service_id=:service_id;''')
 		db.engine.execute(sql, service_id=service_id)
 		sql = text('''DELETE FROM contract WHERE contract_id=:id;''')
+		db.engine.execute(sql, id=id)
+
+		sql = text('''SELECT client_username, worker_username
+						FROM service_request sr, contract c
+						WHERE sr.service_id=c.service_id AND
+							contract_id=:id''')
 		result = db.engine.execute(sql, id=id)
+		result = result.fetchone()
+		pushNotification( \
+			name=result[0], \
+			message=result[1]+' has denied your contract', \
+			link='/contracts/'+str(id))
+
 		return redirect('/contracts')
 	else:
 		return redirect('/')
