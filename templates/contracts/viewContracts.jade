@@ -19,6 +19,8 @@ block content
 							a(href='/profile/'+'#{res[4]}') #{res[4]}
 						p.list-group-item Start Time: #{res[5]}
 						p.list-group-item Status: #{res[6]}
+						if session.type == 'client'
+							a.btn.btn-lg.btn-primary.btn-block(href='/contracts/'+'#{res[0]}'+'/complete') Complete
 	.row
 		if pending
 			h2 Pending Contracts
@@ -34,11 +36,12 @@ block content
 							a(href='/profile/'+'#{res[4]}') #{res[4]}
 						p.list-group-item Start Time: #{res[5]}
 						p.list-group-item Status: #{res[6]}
-						.row
-							.col-md-6
-								a.btn.btn-lg.btn-success.btn-block(href='/contracts/'+'#{res[0]}'+'/accept') Accept
-							.col-md-6
-								a.btn.btn-lg.btn-danger.btn-block(href='/contracts/'+'#{res[0]}'+'/deny') Deny
+						if session.type == 'worker'
+							.row
+								.col-md-6
+									a.btn.btn-lg.btn-success.btn-block(href='/contracts/'+'#{res[0]}'+'/accept') Accept
+								.col-md-6
+									a.btn.btn-lg.btn-danger.btn-block(href='/contracts/'+'#{res[0]}'+'/deny') Deny
 	.row
 		if finished
 			h2 Finished Contracts

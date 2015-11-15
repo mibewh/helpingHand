@@ -4,7 +4,7 @@ block title
 	title Rating
 
 block content
-	form(method='POST', action='/rating')
+	form(method='POST', action='/contracts/'+'#{id}'+'/rating')
 		input(type='hidden', name='id', value=id)
 		.row
 			.col-md-5(style="padding-left: 2%")

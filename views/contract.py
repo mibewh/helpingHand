@@ -88,7 +88,7 @@ def viewContracts():
 		pending = [res for res in results if res[6] == 'pending']
 		accepted = [res for res in results if res[6] == 'accepted']
 		finished = [res for res in results if res[6] == 'finished']
-		return render_template('viewContracts.jade', pending=pending, accepted=accepted, finished=finished)
+		return render_template('viewContracts.jade', pending=pending, accepted=accepted, finished=finished, type=session.get('type'))
 	else:
 		return redirect('/')
 

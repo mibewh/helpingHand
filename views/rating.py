@@ -20,3 +20,8 @@ def rateWorker(contract_id):
 		flash("Rating Submitted")
 		return redirect('/')		
 
+def getRating(worker_username):
+	sql=text('''SELECT AVG(rating) COUNT(rating)
+		FROM contract c
+		WHERE worker_username=:worker_username AND rating IS NOT NULL''')
+	result = db.engine.execute(sql, worker_username=worker_username)
