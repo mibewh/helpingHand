@@ -14,13 +14,13 @@ block content
 				.row
 					.col-md-8
 						//title
-						input.form-control.input-normal(type='text', name='title', placeholder='Title', required, autofocus)
+						input.form-control.input-normal(type='text', name='title', placeholder='Title', maxlength="50", required, autofocus)
 						p
 				.row
 					.col-md-12
 						textarea.form-control(name='description', placeholder='Description', rows='5')
 						p
-						input.form-control(type='text', name='address', placeholder='Address')
+						input.form-control(type='text', name='address', maxlength="100", placeholder='Address')
 						p
 				.row
 					.col-md-6

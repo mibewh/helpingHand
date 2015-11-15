@@ -1,26 +1,26 @@
 from flask import Flask, render_template, g, redirect, request, session, flash, Blueprint
 from sqlalchemy.sql import text
-from . import db, app
+from . import db, app, bcrypt
 
 users = Blueprint('users', __name__, template_folder=app.template_folder+'/users')
 
 def login(username, password):
 	#check if user, password combo is in the database
 	#Client table
-	sql=text('''SELECT * FROM client
-				WHERE client_username=:username AND password=:password;''')
+	sql=text('''SELECT password FROM client
+				WHERE client_username=:username;''')
 	result=db.engine.execute(sql, username=username, password=password)
-	result=[r[0] for r in result]
-	if result != []:
+	result = result.fetchone();
+	if result != None and bcrypt.check_password_hash(result[0], password):
 		session['user'] = username
 		session['type'] = 'client'
 		return True
 	#Worker table
-	sql=text('''SELECT * FROM worker
-				WHERE worker_username=:username AND password=:password;''')
+	sql=text('''SELECT password FROM worker
+				WHERE worker_username=:username;''')
 	result=db.engine.execute(sql, username=username, password=password)
-	result=[r[0] for r in result]
-	if result != []:
+	result = result.fetchone();
+	if result != None and bcrypt.check_password_hash(result[0], password):
 		session['user'] = username
 		session['type'] = 'worker'
 		return True
@@ -62,11 +62,12 @@ def verifyNew(username):
 	return True
 
 def register(username, password, email, phone, type):
+	pw_hash = bcrypt.generate_password_hash(password)
 	if type == 'client':
 		sql=text('''INSERT INTO client(client_username, password, email, phone)VALUES(:username, :password, :email, :phone);''')
 	else:
 		sql=text('''INSERT INTO worker(worker_username, password, email, phone)VALUES(:username, :password, :email, :phone);''')
-	db.engine.execute(sql, username=username, password=password, email=email, phone=phone)
+	db.engine.execute(sql, username=username, password=pw_hash, email=email, phone=phone)
 
 @users.route('/register', methods=('GET', 'POST'))
 def registerPage():
