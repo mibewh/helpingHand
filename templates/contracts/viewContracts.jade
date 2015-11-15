@@ -42,6 +42,11 @@ block content
 									a.btn.btn-lg.btn-success.btn-block(href='/contracts/'+'#{res[0]}'+'/accept') Accept
 								.col-md-6
 									a.btn.btn-lg.btn-danger.btn-block(href='/contracts/'+'#{res[0]}'+'/deny') Deny
+						else
+							.row
+								.col-md-12
+									a.btn.btn-lg.btn-danger.btn-block(href='/contracts/'+'#{res[0]}'+'/cancel') Cancel
+
 	.row
 		if finished
 			h2 Finished Contracts

@@ -139,6 +139,26 @@ def workerDenyContract(id):
 	else:
 		return redirect('/')
 
+@contractBP.route('/contracts/<id>/cancel')
+def clientCancelContract(id):
+	if session.get('user') and session['type'] == 'client':
+		sql = text('''SELECT client_username, worker_username, contract_status, contract.service_id FROM service_request sr, contract WHERE contract_id=:id AND contract.service_id=sr.service_id;''')
+		result = db.engine.execute(sql, id=id).fetchone()
+		client = result[0]
+		worker = result[1]
+		status = result[2]
+		service_id = result[3]
+		if client != session.get('user') or status != 'pending': return redirect('/')
+		sql = text('''DELETE FROM contract WHERE contract_id=:id;''')
+		db.engine.execute(sql, id=id)
+		sql = text('''UPDATE service_request SET contracted=FALSE WHERE service_id=:id''')
+		db.engine.execute(sql, id=service_id)
+		flash('Pending contract deleted')
+		pushNotification(worker, client+' cancelled a pending contract', '/contracts')
+		return redirect('/')
+	else:
+		return redirect('/')
+
 @contractBP.route('/contracts/<id>/complete')
 def completeContract(id):
 	if session.get('user') and session['type'] == 'client':
