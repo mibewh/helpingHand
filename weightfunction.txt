@@ -1,0 +1,11 @@
+Matching criteria:
+	Schedule compatibility
+	Rating for request's tag
+		Rating becomes more important with more contracts completed
+	Mix of newbs and vets (unsure how)
+
+1. Submit a service request (no workers selected)
+2. Pass parameters to worker recommender
+3. Use weight function to sort the list of potential workers
+	Apply slight element of randomness
+4. Return list
