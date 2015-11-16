@@ -20,8 +20,20 @@ def rateWorker(contract_id):
 		flash("Rating Submitted")
 		return redirect('/')		
 
-def getRating(worker_username):
-	sql=text('''SELECT AVG(rating) COUNT(rating)
-		FROM contract c
-		WHERE worker_username=:worker_username AND rating IS NOT NULL''')
-	result = db.engine.execute(sql, worker_username=worker_username)
+def getRating(worker_username, tag):
+	if tag:
+		sql=text('''SELECT AVG(rating) COUNT(rating)
+			FROM contract c, service_request sr
+			WHERE c.service_id=sr.service_id AND 
+				worker_username=:worker_username AND 
+				tag=:tag AND
+				rating IS NOT NULL''')
+		result = db.engine.execute(sql, worker_username=worker_username, tag=tag)
+		return result[0], result[1];
+	else:
+		sql=text('''SELECT AVG(rating) COUNT(rating)
+			FROM contract
+			WHERE worker_username=:worker_username AND 
+				rating IS NOT NULL''')
+		result = db.engine.execute(sql, worker_username=worker_username)
+		return result[0], result[1];

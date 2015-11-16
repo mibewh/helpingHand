@@ -23,8 +23,15 @@ block content
 						input.form-control(type='text', name='address', maxlength="100", placeholder='Address')
 						p
 				.row
+					.col-md-4
+						p.text-left Tag:
+						select.form-control(name='tag')
+							each tag in tags
+								option(value=tag) #{tag}
+				.row
 					.col-md-6
 						//Time of job
+						p
 						input.form-control.input-normal(type='text', name='time', placeholder='Time', required)
 						p
 				.row
