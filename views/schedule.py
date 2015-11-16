@@ -28,13 +28,13 @@ def calculateScheduleNumber(numbers, requestTimeSlots):
 def getSchedules(worker_username, service_id):
 	workerScheduleArray = []
 	requestScheduleArray = []
-	sql = text('''SELECT day, time FROM schedule WHERE
+	sql = text('''SELECT day, hour FROM schedule WHERE
 				  worker_username=:worker;''')
 	schedule = db.engine.execute(sql, worker=worker_username)
 	schedule = schedule.fetchall()
 	for tuple in schedule:
 		workerScheduleArray.append([tuple[0], tuple[1]])
-	sql = text('''SELECT day, time FROM request_schedule WHERE
+	sql = text('''SELECT day, hour FROM request_schedule WHERE
 				  service_id=:request;''')
 	schedule = db.engine.execute(sql, request=service_id)
 	schedule = schedule.fetchall()
