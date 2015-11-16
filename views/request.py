@@ -65,7 +65,7 @@ def viewRequests():
 	if session.get('user'):
 		if session['type'] == 'worker':
 			return redirect('/pending')
-		sql = text('''SELECT service_id, client_username, title, description, schedule, address, contracted FROM service_request WHERE client_username=:username AND contracted=FALSE;''')
+		sql = text('''SELECT service_id, client_username, title, description, schedule, address, contracted, tag FROM service_request WHERE client_username=:username AND contracted=FALSE;''')
 		results = db.engine.execute(sql, username=session.get('user'))
 		results = results.fetchall()
 		results = [r for r in results if r[6]==False]
@@ -74,7 +74,7 @@ def viewRequests():
 		return redirect('/')
 
 def getRequest(service_id):
-	sql=text('''SELECT client_username, title, description, schedule, address FROM service_request WHERE service_id=:id;''')
+	sql=text('''SELECT client_username, title, description, schedule, address, tag FROM service_request WHERE service_id=:id;''')
 	result=db.engine.execute(sql, id=service_id)
 	return result.fetchone()
 
@@ -87,28 +87,29 @@ def getWorkers(service_id):
 def viewRequest(service_id):
 	result = getRequest(service_id)
 	names = getWorkers(service_id)
-	if result:
-		return render_template('request.jade', id=service_id, client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4], worker_names=names)
+	if result and result[0]==session.get('user'):
+		return render_template('request.jade', id=service_id, client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4], tag=result[5], worker_names=names)
 	return redirect('/')
 
 @requestsBP.route('/pending')
 def viewPendings():
 	if session.get('user') and session['type'] == 'worker':
-		sql=text('''SELECT sr.service_id, client_username, title, description, schedule, address, interested, contracted
+		sql=text('''SELECT sr.service_id, client_username, title, description, schedule, address, interested, contracted, tag
 								FROM service_request sr, worker_request wr, worker w
 								WHERE sr.service_id=wr.service_id AND wr.worker_username=w.worker_username AND w.worker_username=:username AND contracted=FALSE''')
 		results = db.engine.execute(sql, username=session.get('user'))
 		results = results.fetchall()
+		results = [r for r in results if r[7]==False]
 		return render_template('viewPending.jade', requests=results)
 	return redirect('/')
 
 @requestsBP.route('/pending/<service_id>')
 def viewPending(service_id):
-	sql=text('''SELECT client_username, title, description, schedule, address, interested FROM service_request sr, worker_request wr WHERE sr.service_id=:id AND sr.service_id=wr.service_id;''')
+	sql=text('''SELECT client_username, title, description, schedule, address, interested, tag FROM service_request sr, worker_request wr WHERE sr.service_id=:id AND sr.service_id=wr.service_id;''')
 	results=db.engine.execute(sql, id=service_id)
 	result = results.fetchone()
 	if result:
-		return render_template('pending.jade', id=service_id, client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4], interested=result[5])
+		return render_template('pending.jade', id=service_id, client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4], interested=result[5], tag=result[6])
 	return redirect('/')
 
 @requestsBP.route('/pending/<service_id>/accept', methods=('GET', 'POST'))
