@@ -15,6 +15,7 @@ def calculateScheduleCompatibility(workerScheduleArray, requestScheduleArray):#a
 					numbers[requestTime[0]] += 1
 				else:
 					numbers[requestTime[0]] = 1
+				break
 
 	return numbers, requestTimeSlots
 
@@ -22,7 +23,7 @@ def calculateScheduleNumber(numbers, requestTimeSlots):
 	#do math here and get a number we can use to tell how relatable they are or relatable in comparison to other workers
 	workerTimeSlots = 0;
 	for value in numbers:
-		workerTimeSlots ++ value
+		workerTimeSlots =+ value
 	return workerTimeSlots/requestTimeSlots
 
 def getSchedules(worker_username, service_id):
