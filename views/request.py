@@ -13,12 +13,13 @@ def selectWorkers(id):
 		pushNotification(user, 'You have been requested for a job', '/pending/'+str(id))
 
 @requestsBP.route('/create', methods=('GET', 'POST'))
-def create_service_request():
+def createServiceRequest():
 	if request.method == 'POST':
-		sql = text('''INSERT INTO service_request(client_username, address, title, description, schedule)
-						VALUES(:user, :address, :title, :description, :time);''')
+		sql = text('''INSERT INTO service_request(client_username, address, title, description, schedule, tag)
+						VALUES(:user, :address, :title, :description, :time, :tag);''')
 		db.engine.execute(sql, user=session["user"], address=request.form.get('address'), title=request.form.get('title'),\
-							description=request.form.get('description'), time=request.form.get("time"))
+							description=request.form.get('description'), time=request.form.get("time"),\
+							tag=request.form.get('tag'))
 		sql2 = text('''SELECT service_id FROM service_request WHERE client_username=:user AND address=:address AND
 						title=:title AND description=:description AND schedule=:time;''')
 		result = db.engine.execute(sql2, user=session["user"], address=request.form.get('address'), title=request.form.get('title'),\
@@ -37,7 +38,10 @@ def create_service_request():
 		sql = text('''SELECT worker_username FROM worker''')
 		results = db.engine.execute(sql)
 		worker_names = [res[0] for res in results]
-		return render_template('create.jade', workers=worker_names)
+		sql = text('''SELECT tag FROM job_tag''')
+		results = db.engine.execute(sql)
+		tags = [res[0] for res in results]
+		return render_template('createRequest.jade', workers=worker_names, tags=tags)
 
 @requestsBP.route('/search', methods=('GET', 'POST'))
 def searchName():
