@@ -5,6 +5,7 @@ from . import db, app
 
 def calculateScheduleCompatibility(workerScheduleArray, requestScheduleArray):#assume {Monday:3pm, Monday:4pm, Monday:5pm......etc
 	numbers = {} #return values. just counts how many times in common for each day {Monday: 4, Tuesday:2 .......etc
+	requestTimeSlots = len(requestScheduleArray)
 	for requestTime in workerScheduleArray:
 		for workerTime in requestScheduleArray
 			if(requestTime[0] ==  workerTime[0] and requestTime[1] ==  workerTime[1]):
@@ -13,10 +14,14 @@ def calculateScheduleCompatibility(workerScheduleArray, requestScheduleArray):#a
 				else:
 					numbers[requestTime[0]] = 1
 
-	return numbers
+	return numbers, requestTimeSlots
 
-def calculateScheduleNumber(arrayFromAboveFunction):
+def calculateScheduleNumber(numbers, requestTimeSlots):
 	#do math here and get a number we can use to tell how relatable they are or relatable in comparison to other workers
+	workerTimeSlots = 0;
+	for value in numbers:
+		workerTimeSlots ++ value
+	return workerTimeSlots/requestTimeSlots
 
 def getSchedules(worker_username, service_id):
 	workerScheduleArray = []
