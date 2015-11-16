@@ -164,26 +164,3 @@ def deleteRequest(service_id):
 		return redirect('/requests')
 	else:
 		return redirect('/')
-
-
-
-
-
-
-#Testing zone
-@app.route('/schedule', methods=('GET', 'POST'))
-def setSchedule():
-	if not session.get('user') or session['type'] != 'worker':
-		return redirect('/')
-	if request.method == 'GET':
-		return render_template('scheduler/setSchedule.jade')
-	days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
-	sql = text('''DELETE FROM worker_schedule WHERE worker_username=:user;''')
-	db.engine.execute(user=session.get('user'))
-	for day in days:
-		times = request.form.getlist(day)
-		for time in times:
-			sql = text('''INSERT INTO worker_schedule(worker_username,day,hour) VALUES(:user,:day,:hour);''')
-			db.engine.execute(user=session.get('user'), day=day, hour=time)
-
-	return redirect('/profile/'+sessionsa.get('user'))

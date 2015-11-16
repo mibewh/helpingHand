@@ -77,7 +77,7 @@ def registerPage():
 			return render_template('register.jade')
 		register(request.form.get('username'), request.form.get('password'), request.form.get('email'), request.form.get('phone'), request.form.get('typeuser'))
 		login(request.form.get('username'), request.form.get('password'))
-		return redirect('/profile/'+request.form.get('username'))
+		return redirect('/schedule')
 
 	return render_template('register.jade')
 
