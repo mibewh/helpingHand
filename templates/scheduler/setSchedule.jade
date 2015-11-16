@@ -41,7 +41,10 @@ block content
 						- var hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
 						each hour in hours
 							td
-								input(type='checkbox', name=day[0:2].lower(), value=hour, style='background-color: green')
+								if (day[0:2].lower(),hour) in times
+									input(type='checkbox', name=day[0:2].lower(), value=hour, checked)
+								else
+									input(type='checkbox', name=day[0:2].lower(), value=hour)
 		p
 		.row
 			.col-md-4

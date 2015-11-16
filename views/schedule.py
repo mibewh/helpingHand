@@ -44,7 +44,9 @@ def setSchedule():
 	if not session.get('user') or session['type'] != 'worker':
 		return redirect('/')
 	if request.method == 'GET':
-		return render_template('scheduler/setSchedule.jade')
+		sql = text('''SELECT day, hour FROM worker_schedule WHERE worker_username=:user;''')
+		times = db.engine.execute(sql, user=session.get('user')).fetchall()
+		return render_template('scheduler/setSchedule.jade', times=times)
 	days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
 	sql = text('''DELETE FROM worker_schedule WHERE worker_username=:user;''')
 	db.engine.execute(sql, user=session.get('user'))
