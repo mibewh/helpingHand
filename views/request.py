@@ -164,4 +164,3 @@ def deleteRequest(service_id):
 		return redirect('/requests')
 	else:
 		return redirect('/')
-

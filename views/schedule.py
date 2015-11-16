@@ -3,11 +3,13 @@ from sqlalchemy.sql import text
 from notify import pushNotification
 from . import db, app
 
+scheduler = Blueprint('scheduler', __name__, template_folder=app.template_folder+'/scheduler')
+
 def calculateScheduleCompatibility(workerScheduleArray, requestScheduleArray):#assume {Monday:3pm, Monday:4pm, Monday:5pm......etc
 	numbers = {} #return values. just counts how many times in common for each day {Monday: 4, Tuesday:2 .......etc
 	requestTimeSlots = len(requestScheduleArray)
 	for requestTime in workerScheduleArray:
-		for workerTime in requestScheduleArray
+		for workerTime in requestScheduleArray:
 			if(requestTime[0] ==  workerTime[0] and requestTime[1] ==  workerTime[1]):
 				if requestTime[0] in numbers:
 					numbers[requestTime[0]] += 1
@@ -34,9 +36,26 @@ def getSchedules(worker_username, service_id):
 		workerScheduleArray.append([tuple[0], tuple[1]])
 	sql = text('''SELECT day, time FROM request_schedule WHERE
 				  service_id=:request;''')
-	schedule = db.engine.execute(sql, request=:service_id)
+	schedule = db.engine.execute(sql, request=service_id)
 	schedule = schedule.fetchall()
 	for tuple in schedule:
 		requestScheduleArray.append([tuple[0], tuple[1]])
 
 	return workerScheduleArray, requestScheduleArray
+
+@scheduler.route('/schedule', methods=('GET', 'POST'))
+def setSchedule():
+	if not session.get('user') or session['type'] != 'worker':
+		return redirect('/')
+	if request.method == 'GET':
+		return render_template('scheduler/setSchedule.jade')
+	days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
+	sql = text('''DELETE FROM worker_schedule WHERE worker_username=:user;''')
+	db.engine.execute(sql, user=session.get('user'))
+	for day in days:
+		times = request.form.getlist(day)
+		for time in times:
+			sql = text('''INSERT INTO worker_schedule(worker_username,day,hour) VALUES(:user,:day,:hour);''')
+			db.engine.execute(sql, user=session.get('user'), day=day, hour=time)
+
+	return redirect('/profile/'+session.get('user'))
