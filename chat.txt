@@ -1,0 +1,7 @@
+1. When a user expresses interest in a worker and worker accepts this, allow chat initiation (both can start it?)
+2. Assign the users a chat room number
+3. Chat is realtime, but will also save messages. It would have to, just in case both are not on at the same time (db entries for messages?)
+4. Standard IM features. Sending messages, receiving, display username beside message
+5. Show whether the other user is typing or not.
+6. Display chat window in a separate webpage or a popup window?
+7. Unassign the room number so the number can be reused (integer overflow is probably a thing, though probably won't be experienced in this demo)
