@@ -18,6 +18,7 @@ def calculateScheduleCompatibility(workerScheduleArray, requestScheduleArray):#a
 				break
 
 	return numbers, requestTimeSlots
+	print (requestTimeSlots)
 
 def calculateScheduleNumber(numbers, requestTimeSlots):
 	#do math here and get a number we can use to tell how relatable they are or relatable in comparison to other workers
@@ -29,18 +30,19 @@ def calculateScheduleNumber(numbers, requestTimeSlots):
 def getSchedules(worker_username, service_id):
 	workerScheduleArray = []
 	requestScheduleArray = []
-	sql = text('''SELECT day, hour FROM schedule WHERE
+	sql = text('''SELECT day, hour FROM worker_schedule WHERE
 				  worker_username=:worker;''')
 	schedule = db.engine.execute(sql, worker=worker_username)
 	schedule = schedule.fetchall()
 	for tuple in schedule:
 		workerScheduleArray.append([tuple[0], tuple[1]])
-	sql = text('''SELECT day, hour FROM request_schedule WHERE
+	sql = text('''SELECT day, hour FROM service_schedule WHERE
 				  service_id=:request;''')
 	schedule = db.engine.execute(sql, request=service_id)
 	schedule = schedule.fetchall()
 	for tuple in schedule:
 		requestScheduleArray.append([tuple[0], tuple[1]])
+		print(requestScheduleArray[-1])
 
 	return workerScheduleArray, requestScheduleArray
 
