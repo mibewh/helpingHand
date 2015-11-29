@@ -9,3 +9,15 @@ Matching criteria:
 3. Use weight function to sort the list of potential workers
 	Apply slight element of randomness
 4. Return list
+
+Suggested schedule compatibility function:
+compatibility = 0
+ for every time slot where both the worker and client are free
+  compatibility += 1;
+ for every other client time slot
+  compatiblity += 1/(time difference to nearest worker time slow + 1);
+
+Suggested job type matching function:
+ ??
+ somehow use rating information of contracts of a particular job type to determine
+ make sure noobs don't get left out because of fewer complete jobs
