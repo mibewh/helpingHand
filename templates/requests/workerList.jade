@@ -1,0 +1,9 @@
+extends ./base.jade
+
+block title
+	title Worker List
+
+block content
+	ul
+		each worker in workerList
+			li #{worker}

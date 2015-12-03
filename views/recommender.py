@@ -6,19 +6,24 @@ from . import db, app
 
 # should return the final list of workers to be displayed to the client
 def getFinalWorkerList(service_id):
-
 	sql = text('SELECT worker_username FROM worker')
-	workerScores = db.engine.execute(sql)
-	workerScores = allWorkers.fetchall()
-	for idx, val in enumerate(allWorkers):
-		allWorkers[idx] = (val[0], getWorkerScoreForService(val[0], service_id))
+	workerList = db.engine.execute(sql)
+	workerList = workerList.fetchall()
+
+	workerScores = []
+	for idx, val in enumerate(workerList):
+		worker_username = val[0]
+		workerList[idx] = worker_username
+		workerScores.append((worker_username, getWorkerScoreForService(worker_username, service_id)))
 	# allWorkers contains tuples of workers and their scores
 
 	# TODO: sort and return
-	return allWorkers
+	return workerList
 
 # gets the compatibility score between the specified user and service
 def getWorkerScoreForService(worker_username, service_id):
+	return 1 #debug
+
 	sql = text('SELECT tag FROM service_request WHERE service_id=:service_id;')
 	tag = db.engine.execute(sql, service_id=service_id)
 	tag = tag.fetchone()

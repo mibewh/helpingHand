@@ -2,6 +2,7 @@ from flask import Flask, render_template, g, redirect, request, session, flash, 
 from sqlalchemy.sql import text
 from . import db, app
 from notify import pushNotification
+from views import recommender
 
 requestsBP = Blueprint('request', __name__, template_folder=app.template_folder+'/requests')
 
@@ -131,7 +132,6 @@ def interestRequest(service_id):
 		return redirect('/pending')
 	else: return redirect('/')
 
-
 @requestsBP.route('/requests/<service_id>/edit', methods=('GET', 'POST'))
 def editRequest(service_id):
 	if request.method=='POST':
@@ -140,6 +140,7 @@ def editRequest(service_id):
 					WHERE service_id=:id;''')
 		db.engine.execute(sql,address=request.form.get('address'), title=request.form.get('title'),\
 							description=request.form.get('description'), time=request.form.get("time"), id=service_id)
+		# redirect to /workerlist/<service_id
 		sql=text('''DELETE FROM worker_request WHERE service_id=:id;''')
 		db.engine.execute(sql, id=service_id)
 		selectWorkers(service_id)
@@ -154,6 +155,17 @@ def editRequest(service_id):
 		worker_names = [res[0] for res in results]
 		return render_template('editRequest.jade', user=user, title=title, description=description, address=address, schedule=schedule, id=service_id, workers=worker_names)
 	return redirect('/requests/'+service_id)
+
+@requestsBP.route('/workerlist/<service_id>', methods=('GET', 'POST'))
+def workerList(service_id):
+	if request.method=='POST':
+		sql=text('''DELETE FROM worker_request WHERE service_id=:id;''')
+		db.engine.execute(sql, id=service_id)
+		selectWorkers(service_id)
+		return redirect('/requests/'+service_id)
+
+	workerlist = recommender.getFinalWorkerList(service_id)
+	return render_template('workerList.jade', workerList=workerlist)
 
 @requestsBP.route('/requests/<service_id>/delete')
 def deleteRequest(service_id):
