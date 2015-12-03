@@ -15,7 +15,10 @@ block content
 				a(href='/profile/'+client_username) #{client_username}
 				button.btn.btn-xs.btn-primary(onclick="popup('/chat/"+id+";"+session.user+"'); return false;") Chat
 			p Time: #{schedule}
-			p Address #{address}
+			p Address: #{address}
+			p Schedule:
+			each day in days
+				p #{day}
 		if interested
 			form(method='post', action='/pending/'+id+'/accept')
 				button.btn.btn-lg.btn-success.btn-block(type='submit') Set Not Interested

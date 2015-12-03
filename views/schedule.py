@@ -23,3 +23,37 @@ def setSchedule():
 			db.engine.execute(sql, user=session.get('user'), day=day, hour=time)
 
 	return redirect('/profile/'+session.get('user'))
+
+
+def formatSchedule(type, id):
+	if type == 'worker':
+		sql = text('''SELECT day, hour FROM worker_schedule
+					  WHERE worker_username=:id
+					  ORDER BY hour ASC''')
+	else:
+		sql = text('''SELECT day, hour FROM service_schedule
+					  WHERE service_id=:id
+					  ORDER BY hour ASC''')
+	results = db.engine.execute(sql, id=id).fetchall()
+	days = ['Monday: ', 'Tuesday: ', 'Wednesday: ', 'Thursday: ', 'Friday: ', 'Saturday: ', 'Sunday: ']
+	for result in results:
+		dayVal = getDayVal(result[0])
+		time = result[1] % 12
+		if time == 0: time = 12
+		if result[1] / 12 == 0:
+			mer = 'AM'
+		else:
+			mer = 'PM'
+		days[dayVal] += str(time) + mer + ' '
+	return days
+
+def getDayVal(day):
+	return {
+		'mo': 0,
+		'tu': 1,
+		'we': 2,
+		'th': 3,
+		'fr': 4,
+		'sa': 5,
+		'su': 6,
+	}[day]

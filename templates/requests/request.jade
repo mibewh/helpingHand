@@ -14,6 +14,9 @@ block content
 			p #{description}
 			p Time: #{schedule}
 			p Address: #{address}
+			p Schedule:
+			each day in days
+				p #{day}
 			p Workers:
 			ul
 			each worker in worker_names

@@ -13,6 +13,11 @@ block content
 			p Email: #{email}
 			p Phone number: #{phone}
 			p Type: #{type}
+			if session.user == username
+				if session.type == 'worker'
+					p Schedule:
+					each day in days
+						p #{day}
 			br
 			if session.user == username
 				if session.type == 'worker'
