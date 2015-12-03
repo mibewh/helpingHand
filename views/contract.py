@@ -62,7 +62,8 @@ def viewContract(contract_id):
 					c.worker_username,
 					c.time, 
 					c.contract_status,
-					c.service_id
+					c.service_id,
+					sr.tag
 				  FROM contract c, service_request sr
 				  WHERE c.service_id=sr.service_id AND c.contract_id=:contract_id''')
 	result = db.engine.execute(sql, contract_id=contract_id)
@@ -81,7 +82,8 @@ def viewContracts():
 						sr.client_username, 
 						c.worker_username, 
 						c.time,
-						c.contract_status
+						c.contract_status,
+						sr.tag
 					FROM contract c, service_request sr
 					WHERE c.service_id=sr.service_id AND (sr.client_username=:username OR c.worker_username=:username)
 					ORDER BY c.time_submit DESC;''')

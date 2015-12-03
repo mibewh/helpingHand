@@ -36,3 +36,11 @@ Suggestions for helping noobs:
  Essentially gives a person a certain number of tries to "prove himself"
 2.
  Add element of randomness to score
+
+tier thresholds
+0
+5
+15
+40
+100
+250
