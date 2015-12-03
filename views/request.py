@@ -26,9 +26,8 @@ def createServiceRequest():
 		result = db.engine.execute(sql2, user=session["user"], address=request.form.get('address'), title=request.form.get('title'),\
 							description=request.form.get('description'), time=request.form.get("time"))
 		idnum = result.fetchone()
-		selectWorkers(idnum[0])
 		flash('Service request created.')
-		return redirect('/')
+		return redirect('/requests/'+str(idnum[0])+'/workers')
 	if not session.get('user'):
 		flash('Please login before creating requests.')
 		return redirect('/')
@@ -36,13 +35,18 @@ def createServiceRequest():
 		flash('You must be a client to create service requests.')
 		return redirect('/')
 	else:
-		sql = text('''SELECT worker_username FROM worker''')
-		results = db.engine.execute(sql)
-		worker_names = [res[0] for res in results]
 		sql = text('''SELECT tag FROM job_tag''')
 		results = db.engine.execute(sql)
 		tags = [res[0] for res in results]
-		return render_template('createRequest.jade', workers=worker_names, tags=tags)
+		return render_template('createRequest.jade', tags=tags)
+
+@requestsBP.route('/requests/<service_id>/workers', methods=('GET', 'POST'))
+def selectWorkerList(service_id):
+	sql = text('''SELECT worker_username FROM worker''')
+	results = db.engine.execute(sql)
+	worker_names = [res[0] for res in results]
+	selectWorkers(service_id)
+	return render_template('workerList.jade', workers=worker_names, id=service_id)
 
 @requestsBP.route('/search', methods=('GET', 'POST'))
 def searchName():
@@ -144,7 +148,7 @@ def editRequest(service_id):
 		sql=text('''DELETE FROM worker_request WHERE service_id=:id;''')
 		db.engine.execute(sql, id=service_id)
 		selectWorkers(service_id)
-		return redirect('/requests/'+service_id)
+		return redirect('/requests/'+service_id+'/workers')
 
 	sql=text('''SELECT * FROM service_request WHERE service_id=:id AND client_username=:user;''')
 	result = db.engine.execute(sql, id=service_id, user=session['user'])

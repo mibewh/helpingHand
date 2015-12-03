@@ -1,0 +1,24 @@
+extends ./base.jade
+
+block title
+	title Edit Request
+
+block content
+	.text-left
+	form(method='POST', action='/requests/'+id+'/edit')
+		.row
+			.col-md-6
+				.row
+					.col-md-12
+						h1.text-left Select Possible Workers
+				.row
+					.col-md-12.text-left
+						h2 Workers:
+						each worker in workers
+							.row.col-md-12
+								input(type='checkbox', name='workers', value=worker) 
+								|  #{worker}
+					p
+					.col-md-2
+						button.btn.btn-primary.btn-block.btn-signin(type='submit') Submit
+										.row
