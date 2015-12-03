@@ -11,11 +11,12 @@ def submitContract():
 	if request.method=='POST':
 		# move to after table insertion when debugging
 		sql = text('''INSERT INTO contract
-					  (worker_username, service_id, contract_status)
-					  VALUES (:worker_username, :service_id, 'pending');''')
+					  (worker_username, service_id, time, contract_status)
+					  VALUES (:worker_username, :service_id, :time, 'pending');''')
 		db.engine.execute(sql, \
 			worker_username=request.form.get('worker_username'), \
-			service_id=request.form.get('service_id'))
+			service_id=request.form.get('service_id'), \
+			time=request.form.get('time'))
 		sql = text('''UPDATE service_request SET contracted=TRUE WHERE service_id=:service_id''')
 		db.engine.execute(sql, service_id=request.form.get('service_id'))
 
@@ -43,13 +44,13 @@ def submitContract():
 @contractBP.route('/createContract', methods=('GET', 'POST'))
 def createContract():
 	if request.method=='GET': return redirect('/')
-	sql = text('''SELECT title, description, address, 
+	sql = text('''SELECT title, description, address, schedule
 				  FROM service_request sr, worker_request wr
 				  WHERE sr.service_id=wr.service_id AND sr.service_id=:id AND worker_username=:worker;''')
 	print(request.form.get('service_id'), request.form.get('worker'))
 	results = db.engine.execute(sql, id=request.form.get('service_id'), worker=request.form.get('worker'))
 	res = results.fetchone()
-	return render_template('createContract.jade', title=res[0], description=res[1], address=res[2], \
+	return render_template('createContract.jade', title=res[0], description=res[1], address=res[2], time=res[3], \
 							service_id=request.form.get('service_id'), worker_username=request.form.get('worker'))
 
 @contractBP.route('/contracts/<contract_id>')
@@ -59,6 +60,7 @@ def viewContract(contract_id):
 					sr.description, 
 					sr.client_username, 
 					c.worker_username,
+					c.time, 
 					c.contract_status,
 					c.service_id
 				  FROM contract c, service_request sr
@@ -77,15 +79,16 @@ def viewContracts():
 						sr.title, 
 						sr.description, 
 						sr.client_username, 
-						c.worker_username,
+						c.worker_username, 
+						c.time,
 						c.contract_status
 					FROM contract c, service_request sr
 					WHERE c.service_id=sr.service_id AND (sr.client_username=:username OR c.worker_username=:username);''')
 		results = db.engine.execute(sql, username=session.get('user'))
 		results = results.fetchall()
-		pending = [res for res in results if res[5] == 'pending']
-		accepted = [res for res in results if res[5] == 'accepted']
-		finished = [res for res in results if res[5] == 'finished']
+		pending = [res for res in results if res[6] == 'pending']
+		accepted = [res for res in results if res[6] == 'accepted']
+		finished = [res for res in results if res[6] == 'finished']
 		return render_template('viewContracts.jade', pending=pending, accepted=accepted, finished=finished, type=session.get('type'))
 	else:
 		return redirect('/')
