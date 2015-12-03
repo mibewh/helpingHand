@@ -1,5 +1,6 @@
 from flask import Flask, render_template, g, redirect, request, session, flash, Blueprint
 from sqlalchemy.sql import text
+from operator import itemgetter
 from . import db, app
 
 #TODO: implement tiered system?
@@ -17,13 +18,15 @@ def getFinalWorkerList(service_id):
 		workerScores.append((worker_username, getWorkerScoreForService(worker_username, service_id)))
 	# allWorkers contains tuples of workers and their scores
 
-	# TODO: sort and return
+	workerScores = sorted(workerScores, key=itemgetter(1))
+	for idx, val in enumerate(workerList):
+		workerList[idx] = workerScores[idx][0]
+
+	#list of worker_usernames
 	return workerList
 
 # gets the compatibility score between the specified user and service
 def getWorkerScoreForService(worker_username, service_id):
-	return 1 #debug
-
 	sql = text('SELECT tag FROM service_request WHERE service_id=:service_id;')
 	tag = db.engine.execute(sql, service_id=service_id)
 	tag = tag.fetchone()
