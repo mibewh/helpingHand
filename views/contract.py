@@ -61,7 +61,8 @@ def viewContract(contract_id):
 					sr.client_username, 
 					c.worker_username,
 					c.time, 
-					c.contract_status
+					c.contract_status,
+					c.service_id
 				  FROM contract c, service_request sr
 				  WHERE c.service_id=sr.service_id AND c.contract_id=:contract_id''')
 	result = db.engine.execute(sql, contract_id=contract_id)

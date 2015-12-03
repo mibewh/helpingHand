@@ -4,6 +4,7 @@ block title
 	title #{title}
 
 block content
+	script(src=url_for('static', filename='popup.js'))
 	.col-md-3
 	.col-md-6
 		.panel.panel-default.text-left(style="padding-left:2%")
@@ -12,6 +13,7 @@ block content
 			p #{description}
 			p Client: 
 				a(href='/profile/'+client_username) #{client_username}
+				button.btn.btn-xs.btn-primary(onclick="popup('/chat/"+id+";"+session.user+"'); return false;") Chat
 			p Time: #{schedule}
 			p Address #{address}
 		if interested

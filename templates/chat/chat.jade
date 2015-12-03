@@ -1,0 +1,76 @@
+html(lang="en")
+	head
+		title Chat
+	body(style="margin-left: 10px; margin-right: 10px;")
+		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
+		script(src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js")
+		link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css')
+		link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css')
+		script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')
+
+		//Client Code
+		script(type='text/javascript').
+			var socket;
+			var typing = false;
+			var typeTimeout = undefined;
+
+			function leave_room() {
+				socket.emit('left', {}, function() {
+					socket.disconnect();
+					// window.location.href = "/";
+					close();
+				});
+			}
+			function doneTyping() {
+				typing = false;
+				socket.emit('doneTyping', {});
+			}
+			$(document).ready(function() {
+				socket = io.connect('http://' + document.domain + ':' + location.port + '/chat'); //possibly remove port in production
+				//Handle the SocketIO events
+				socket.on('connect', function() {
+					socket.emit('joined', {});
+				});
+				socket.on('message', function(data) {
+					$('#chat').val($('#chat').val() + data.msg + '\n');
+					$('#chat').scrollTop($('#chat')[0].scrollHeight);
+				});
+				socket.on('userTyping', function(data){
+					if(data.user != '#{session.user}') {
+						$('#typing').text(data.user + ' is typing...');
+					}
+				});
+				socket.on('userDoneTyping', function(data){
+					if(data.user != '#{session.user}') {
+						$('#typing').text('');
+					}
+				});
+
+				$('#text').keypress(function(e) { //Handle the pressing of the enter key to sumbit message
+					var code = e.keyCode || e.which;
+					if (code == 13) {
+						text = $('#text').val();
+						$('#text').val('');
+						socket.emit('text', {msg: text});
+					}
+					else {
+						if(typing == false) {
+							typing = true;
+							socket.emit('typing', {});
+							typeTimeout = setTimeout(doneTyping, 500);
+						}
+						else {
+							clearTimeout(typeTimeout);
+							typeTimeout = setTimeout(doneTyping, 500);
+						}
+					}
+				});
+			});
+
+		//Displayed HTML
+		h1 Chatting with #{otherUser}
+		textarea.form-control#chat(cols="80", rows="16", readonly, unselectable="on", style="box-shadow: none; background-color: white;")
+			#{chat}
+		p#typing(style="margin-top: 5px; margin-bottom: 5px; height: 1em")
+		input.form-control#text(placeholder='Enter message', size="80")
+		br

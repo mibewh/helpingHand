@@ -2,8 +2,9 @@ from flask import Flask, render_template, g, redirect, request, session, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from flask.ext.bcrypt import Bcrypt
+from flask.ext.socketio import SocketIO
 
-app = Flask(__name__, template_folder='../templates')
+app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 app.debug=True
 app.secret_key = 'this is soooooo secret right?'
@@ -15,18 +16,23 @@ db.engine.connect()
 
 bcrypt = Bcrypt(app)
 
+socketio = SocketIO()
+socketio.init_app(app)
+
 from user import users
 from request import requestsBP
 from contract import contractBP
 from rating import ratings
 from notify import notifications
 from schedule import scheduler
+from chat import chatBP
 app.register_blueprint(users)
 app.register_blueprint(requestsBP)
 app.register_blueprint(contractBP)
 app.register_blueprint(ratings)
 app.register_blueprint(notifications)
 app.register_blueprint(scheduler)
+app.register_blueprint(chatBP)
 
 @app.route('/')
 def index():
