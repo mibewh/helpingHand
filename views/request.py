@@ -68,7 +68,9 @@ def viewRequests():
 	if session.get('user'):
 		if session['type'] == 'worker':
 			return redirect('/pending')
-		sql = text('''SELECT service_id, client_username, title, description, address, contracted, tag FROM service_request WHERE client_username=:username AND contracted=FALSE;''')
+		sql = text('''SELECT service_id, client_username, title, description, address, contracted, tag
+					  FROM service_request WHERE client_username=:username AND contracted=FALSE
+					  ORDER BY time_submit DESC;''')
 		results = db.engine.execute(sql, username=session.get('user'))
 		results = results.fetchall()
 		results = [r for r in results if r[5]==False]
@@ -100,7 +102,8 @@ def viewPendings():
 	if session.get('user') and session['type'] == 'worker':
 		sql=text('''SELECT sr.service_id, client_username, title, description, address, interested, contracted, tag
 								FROM service_request sr, worker_request wr, worker w
-								WHERE sr.service_id=wr.service_id AND wr.worker_username=w.worker_username AND w.worker_username=:username AND contracted=FALSE''')
+								WHERE sr.service_id=wr.service_id AND wr.worker_username=w.worker_username AND w.worker_username=:username AND contracted=FALSE
+								ORDER BY time_submit DESC;''')
 		results = db.engine.execute(sql, username=session.get('user'))
 		results = results.fetchall()
 		results = [r for r in results if r[6]==False]
