@@ -1,6 +1,7 @@
 from flask import Flask, render_template, g, redirect, request, session, flash, Blueprint
 from sqlalchemy.sql import text
 from . import db, app, bcrypt
+from schedule import formatSchedule
 
 users = Blueprint('users', __name__, template_folder=app.template_folder+'/users')
 
@@ -96,7 +97,8 @@ def getProfile(username):
 def profile(username):
 	result, type = getProfile(username)
 	if result:
-		return render_template('profile.jade', username=result[0], email=result[1], phone=result[2], type=type)
+		days = formatSchedule('worker', username)
+		return render_template('profile.jade', username=result[0], email=result[1], phone=result[2], type=type, days=days)
 	return redirect('/')
 
 @users.route('/profile/<username>/edit', methods=('GET', 'POST'))
