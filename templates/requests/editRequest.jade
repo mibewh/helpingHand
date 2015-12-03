@@ -29,47 +29,10 @@ block content
 						//Time of job
 						input.form-control.input-normal(type='text', name='time', placeholder='Time', required, value=schedule)
 						p
-					.col-md-12
-						table(border='1', align='center')
-							tr 
-								td
-								td 12 AM
-								td 1 AM
-								td 2 AM
-								td 3 AM
-								td 4 AM
-								td 5 AM
-								td 6 AM
-								td 7 AM
-								td 8 AM
-								td 9 AM
-								td 10 AM
-								td 11 AM
-								td 12 PM
-								td 1 PM
-								td 2 PM
-								td 3 PM
-								td 4 PM
-								td 5 PM
-								td 6 PM
-								td 7 PM
-								td 8 PM
-								td 9 PM
-								td 10 PM
-								td 11 PM
-							- var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-							each day in days
-								tr
-									td #{day}
-									- var hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
-									each hour in hours
-										td
-											if (day[0:2].lower(),hour) in times
-												input(type='checkbox', name=day[0:2].lower(), value=hour, checked)
-											else
-												input(type='checkbox', name=day[0:2].lower(), value=hour)
-																.row
-						p
+					
+				a(href='/'+id+'/schedule') Change Schedule
+									br
+
 					.col-md-2
 						button.btn.btn-primary.btn-block.btn-signin(type='submit') Submit
 										.row

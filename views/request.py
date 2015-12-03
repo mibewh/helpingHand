@@ -27,6 +27,12 @@ def createServiceRequest():
 		result = db.engine.execute(sql2, user=session["user"], address=request.form.get('address'), title=request.form.get('title'),\
 							description=request.form.get('description'), time=request.form.get("time"))
 		idnum = result.fetchone()
+		days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
+		for day in days:
+			times = request.form.getlist(day)
+			for time in times:
+				sql = text('''INSERT INTO service_schedule(service_id,day,hour) VALUES(:id,:day,:hour);''')
+				db.engine.execute(sql, id=idnum[0], day=day, hour=time)
 		flash('Service request created.')
 		return redirect('/requests/'+str(idnum[0])+'/workers')
 	if not session.get('user'):
@@ -139,10 +145,6 @@ def editRequest(service_id):
 					WHERE service_id=:id;''')
 		db.engine.execute(sql,address=request.form.get('address'), title=request.form.get('title'),\
 							description=request.form.get('description'), time=request.form.get("time"), id=service_id)
-		# redirect to /workerlist/<service_id
-		sql=text('''DELETE FROM worker_request WHERE service_id=:id;''')
-		db.engine.execute(sql, id=service_id)
-		selectWorkers(service_id)
 		return redirect('/requests/'+service_id+'/workers')
 
 	sql=text('''SELECT * FROM service_request WHERE service_id=:id AND client_username=:user;''')
