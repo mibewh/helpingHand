@@ -27,7 +27,6 @@ Needs:
 	Notification pushing to keep users up to date about new contact - DONE
 		Only push notification once to non sending user when that user is not online.
 
-	Style!
+	Style! - DONE
 		General appearance tweaks
 		Display chat partner in header
-		

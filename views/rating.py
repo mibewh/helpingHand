@@ -15,8 +15,11 @@ def rateWorker(contract_id):
 		else:
 			return redirect('/')
 	if request.method=="POST":
+		rating = request.form.get('rating')
+		if rating == '0':
+			rating = None
 		sql=text('''UPDATE contract SET rating=:rating, review=:review WHERE contract_id=:id;''')
-		result=db.engine.execute(sql, rating=request.form.get("rating"), review=request.form.get("review"), id=contract_id)
+		result=db.engine.execute(sql, rating=rating, review=request.form.get("review"), id=contract_id)
 		flash("Rating Submitted")
 		return redirect('/')		
 
