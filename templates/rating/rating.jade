@@ -8,13 +8,16 @@ block content
 		input(type='hidden', name='id', value=id)
 		.row
 			.col-md-5(style="padding-left: 2%")
-				h1.text-left Leave a rating for: #{name}
-				.row
-					| Rating:
-					input.form-control.input-normal(type='text', name='rating', placeholder='Until we get stars use this', required, autofocus)
-				.row
+				.row.text-left
+					h1.text-left Leave a rating for: #{name}
+					input.ratingInput#rating(name='rating', type='number', min=0, max=5, step=1, data-size='sm')
+
 					| Review:
 					textarea.form-control(name='review', placeholder='Leave a review', rows='5')
 				.row
 					p
 					button.btn.btn-primary.btn-block.btn-signin(type='submit') Submit
+	script(type='text/javascript').
+		$(document).ready(function() {
+			$("#rating").rating({showCaption:false});
+		});
