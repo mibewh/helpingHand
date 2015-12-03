@@ -83,9 +83,9 @@ def viewContracts():
 					WHERE c.service_id=sr.service_id AND (sr.client_username=:username OR c.worker_username=:username);''')
 		results = db.engine.execute(sql, username=session.get('user'))
 		results = results.fetchall()
-		pending = [res for res in results if res[6] == 'pending']
-		accepted = [res for res in results if res[6] == 'accepted']
-		finished = [res for res in results if res[6] == 'finished']
+		pending = [res for res in results if res[5] == 'pending']
+		accepted = [res for res in results if res[5] == 'accepted']
+		finished = [res for res in results if res[5] == 'finished']
 		return render_template('viewContracts.jade', pending=pending, accepted=accepted, finished=finished, type=session.get('type'))
 	else:
 		return redirect('/')

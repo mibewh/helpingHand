@@ -114,7 +114,7 @@ def viewPending(service_id):
 	result = results.fetchone()
 	if result:
 		days = formatSchedule('request', service_id)
-		return render_template('pending.jade', id=service_id, client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4], interested=result[5], tag=result[6], days=days)
+		return render_template('pending.jade', id=service_id, client_username=result[0], title=result[1], description=result[2], address=result[3], interested=result[4], tag=result[5], days=days)
 	return redirect('/')
 
 @requestsBP.route('/pending/<service_id>/accept', methods=('GET', 'POST'))
