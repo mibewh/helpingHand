@@ -15,7 +15,7 @@ block content
 					p.list-group-item Tag: #{res[7]}
 					//p.list-group-item #{res[3]}
 					p.list-group-item Address: #{res[4]}
-					if res[6]
+					if res[5]
 						form(method='post', action='/pending/'+'#{res[0]}'+'/accept')
 							button.btn.btn-lg.btn-success.btn-block(type='submit') Set Not Interested
 					else
