@@ -44,7 +44,6 @@ def selectWorkerList(service_id):
 	sql = text('''SELECT worker_username FROM worker''')
 	results = db.engine.execute(sql)
 	worker_names = [res[0] for res in results]
-	selectWorkers(service_id)
 	return render_template('workerList.jade', workers=worker_names, id=service_id)
 
 @requestsBP.route('/search', methods=('GET', 'POST'))
