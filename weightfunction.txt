@@ -9,3 +9,30 @@ Matching criteria:
 3. Use weight function to sort the list of potential workers
 	Apply slight element of randomness
 4. Return list
+
+
+Suggested schedule compatibility algorithm:
+compatibility = 0
+ for every time slot where both the worker and client are free
+  compatibility += 1;
+ for every other client time slot
+  compatiblity += 1/(time difference to nearest worker time slow + 1);
+
+Suggested job type matching algorithm:
+ statistics!
+ create a 95% confidence interval for the rating,
+ sample size = number of ratings
+ the score is the lower bound of the interval
+ (fewer ratings -> smaller sample size -> wider interval -> smaller lower bound -> people with same average rating but fewer ratings have a lower score)
+
+ Note: Does not account for helping noobs
+ Note: I have a feeling that this is going to totally destroy someone's chances of getting anywhere if the first job they did just happened to mess up
+
+Suggestions for helping noobs:
+1.
+ Two separate lists, one for noobs, one for the rest? and then sort each list by average (with a little bit of randomness)
+ Present two separate lists to users?
+ Categorise person as noob based on number of contracts completed? e.g. <= 10 contracts means noob
+ Essentially gives a person a certain number of tries to "prove himself"
+2.
+ Add element of randomness to score
