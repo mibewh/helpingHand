@@ -12,9 +12,8 @@ block content
 						a(href='/pending/'+'#{res[0]}') #{res[2]}
 					p.list-group-item Client: 
 						a(href='/profile/'+res[1]) #{res[1]}
-					p.list-group-item Tag: #{res[8]}
+					p.list-group-item Tag: #{res[7]}
 					//p.list-group-item #{res[3]}
-					p.list-group-item Time: #{res[4]}
 					p.list-group-item Address: #{res[5]}
 					if res[6]
 						form(method='post', action='/pending/'+'#{res[0]}'+'/accept')

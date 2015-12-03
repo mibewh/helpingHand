@@ -16,15 +16,14 @@ def selectWorkers(id):
 @requestsBP.route('/create', methods=('GET', 'POST'))
 def createServiceRequest():
 	if request.method == 'POST':
-		sql = text('''INSERT INTO service_request(client_username, address, title, description, schedule, tag)
-						VALUES(:user, :address, :title, :description, :time, :tag);''')
+		sql = text('''INSERT INTO service_request(client_username, address, title, description, tag)
+						VALUES(:user, :address, :title, :description, :tag);''')
 		db.engine.execute(sql, user=session["user"], address=request.form.get('address'), title=request.form.get('title'),\
-							description=request.form.get('description'), time=request.form.get("time"),\
-							tag=request.form.get('tag'))
+							description=request.form.get('description'), tag=request.form.get('tag'))
 		sql2 = text('''SELECT service_id FROM service_request WHERE client_username=:user AND address=:address AND
-						title=:title AND description=:description AND schedule=:time;''')
+						title=:title AND description=:description;''')
 		result = db.engine.execute(sql2, user=session["user"], address=request.form.get('address'), title=request.form.get('title'),\
-							description=request.form.get('description'), time=request.form.get("time"))
+							description=request.form.get('description'))
 		idnum = result.fetchone()
 		days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
 		for day in days:
@@ -68,16 +67,16 @@ def viewRequests():
 	if session.get('user'):
 		if session['type'] == 'worker':
 			return redirect('/pending')
-		sql = text('''SELECT service_id, client_username, title, description, schedule, address, contracted, tag FROM service_request WHERE client_username=:username AND contracted=FALSE;''')
+		sql = text('''SELECT service_id, client_username, title, description, address, contracted, tag FROM service_request WHERE client_username=:username AND contracted=FALSE;''')
 		results = db.engine.execute(sql, username=session.get('user'))
 		results = results.fetchall()
-		results = [r for r in results if r[6]==False]
+		results = [r for r in results if r[5]==False]
 		return render_template('viewRequests.jade', requests=results)
 	else:
 		return redirect('/')
 
 def getRequest(service_id):
-	sql=text('''SELECT client_username, title, description, schedule, address, tag FROM service_request WHERE service_id=:id;''')
+	sql=text('''SELECT client_username, title, description, address, tag FROM service_request WHERE service_id=:id;''')
 	result=db.engine.execute(sql, id=service_id)
 	return result.fetchone()
 
@@ -91,24 +90,24 @@ def viewRequest(service_id):
 	result = getRequest(service_id)
 	names = getWorkers(service_id)
 	if result and result[0]==session.get('user'):
-		return render_template('request.jade', id=service_id, client_username=result[0], title=result[1], description=result[2], schedule=result[3], address=result[4], tag=result[5], worker_names=names)
+		return render_template('request.jade', id=service_id, client_username=result[0], title=result[1], description=result[2], address=result[3], tag=result[4], worker_names=names)
 	return redirect('/')
 
 @requestsBP.route('/pending')
 def viewPendings():
 	if session.get('user') and session['type'] == 'worker':
-		sql=text('''SELECT sr.service_id, client_username, title, description, schedule, address, interested, contracted, tag
+		sql=text('''SELECT sr.service_id, client_username, title, description, address, interested, contracted, tag
 								FROM service_request sr, worker_request wr, worker w
 								WHERE sr.service_id=wr.service_id AND wr.worker_username=w.worker_username AND w.worker_username=:username AND contracted=FALSE''')
 		results = db.engine.execute(sql, username=session.get('user'))
 		results = results.fetchall()
-		results = [r for r in results if r[7]==False]
+		results = [r for r in results if r[6]==False]
 		return render_template('viewPending.jade', requests=results)
 	return redirect('/')
 
 @requestsBP.route('/pending/<service_id>')
 def viewPending(service_id):
-	sql=text('''SELECT client_username, title, description, schedule, address, interested, tag FROM service_request sr, worker_request wr WHERE sr.service_id=:id AND sr.service_id=wr.service_id;''')
+	sql=text('''SELECT client_username, title, description, address, interested, tag FROM service_request sr, worker_request wr WHERE sr.service_id=:id AND sr.service_id=wr.service_id;''')
 	results=db.engine.execute(sql, id=service_id)
 	result = results.fetchone()
 	if result:
@@ -138,20 +137,20 @@ def interestRequest(service_id):
 def editRequest(service_id):
 	if request.method=='POST':
 		sql=text('''UPDATE service_request
-					SET title=:title, description=:description, address=:address, schedule=:time
+					SET title=:title, description=:description, address=:address
 					WHERE service_id=:id;''')
 		db.engine.execute(sql,address=request.form.get('address'), title=request.form.get('title'),\
-							description=request.form.get('description'), time=request.form.get("time"), id=service_id)
+							description=request.form.get('description'), id=service_id)
 		return redirect('/requests/'+service_id+'/workers')
 
 	sql=text('''SELECT * FROM service_request WHERE service_id=:id AND client_username=:user;''')
 	result = db.engine.execute(sql, id=service_id, user=session['user'])
 	if result:
-		user, title, description, schedule, address, tag = getRequest(service_id)
+		user, title, description, address, tag = getRequest(service_id)
 		sql2 = text('''SELECT worker_username FROM worker''')
 		results = db.engine.execute(sql2)
 		worker_names = [res[0] for res in results]
-		return render_template('editRequest.jade', user=user, title=title, description=description, address=address, schedule=schedule, id=service_id, workers=worker_names)
+		return render_template('editRequest.jade', user=user, title=title, description=description, address=address, id=service_id, workers=worker_names)
 	return redirect('/requests/'+service_id)
 
 @requestsBP.route('/requests/<service_id>/workers', methods=('GET', 'POST'))

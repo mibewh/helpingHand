@@ -13,8 +13,7 @@ block content
 			p #{description}
 			p Client: 
 				a(href='/profile/'+client_username) #{client_username}
-				button.btn.btn-xs.btn-primary(onclick="popup('/chat/"+id+";"+session.user+"'); return false;") Chat
-			p Time: #{schedule}
+				button.btn.btn-xs.btn-primary(onclick="popup('/chat/"+id+";"+session.user+"'); return false;")
 			p Address #{address}
 		if interested
 			form(method='post', action='/pending/'+id+'/accept')
