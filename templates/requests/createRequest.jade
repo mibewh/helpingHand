@@ -78,11 +78,3 @@ block content
 				.row
 					.col-md-2
 						button.btn.btn-primary.btn-block.btn-signin(type='submit') Submit
-			.col-md-6
-				.row
-					.col-md-12.text-left
-						h2 Workers:
-						each worker in workers
-							.row.col-md-12
-								input(type='checkbox', name='workers', value=worker) 
-								|  #{worker}
