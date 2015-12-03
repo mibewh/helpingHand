@@ -160,7 +160,7 @@ def editRequest(service_id):
 		return render_template('editRequest.jade', user=user, title=title, description=description, address=address, schedule=schedule, id=service_id, workers=worker_names)
 	return redirect('/requests/'+service_id)
 
-@requestsBP.route('/workerlist/<service_id>', methods=('GET', 'POST'))
+@requestsBP.route('/requests/<service_id>/workers', methods=('GET', 'POST'))
 def workerList(service_id):
 	if request.method=='POST':
 		sql=text('''DELETE FROM worker_request WHERE service_id=:id;''')
