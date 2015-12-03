@@ -23,3 +23,30 @@ def setSchedule():
 			db.engine.execute(sql, user=session.get('user'), day=day, hour=time)
 
 	return redirect('/profile/'+session.get('user'))
+
+@scheduler.route('/<service_id>/schedule', methods=('GET', 'POST'))
+def setServiceSchedule(service_id):
+	if not session.get('user') or session['type'] != 'client':
+		return redirect('/')
+	if request.method == 'GET':
+		sql = text('''SELECT day, hour FROM service_schedule WHERE service_id=:id;''')
+		times = db.engine.execute(sql, id=service_id).fetchall()
+		return render_template('scheduler/setServiceSchedule.jade', times=times, id=service_id)
+	days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
+	sql = text('''DELETE FROM service_schedule WHERE service_id=:id;''')
+	db.engine.execute(sql, id=service_id)
+	for day in days:
+		times = request.form.getlist(day)
+		for time in times:
+			sql = text('''INSERT INTO service_schedule(service_id,day,hour) VALUES(:id,:day,:hour);''')
+			db.engine.execute(sql, id=service_id, day=day, hour=time)
+	if request.method == 'POST':
+		sql = text('''DELETE FROM service_schedule WHERE service_id=:id;''')
+		db.engine.execute(sql, id=service_id)
+		for day in days:
+			times = request.form.getlist(day)
+			for time in times:
+				sql = text('''INSERT INTO service_schedule(service_id,day,hour) VALUES(:id,:day,:hour);''')
+				db.engine.execute(sql, id=service_id, day=day, hour=time)
+		return redirect('/requests/'+service_id+'/workers')
+	return redirect('/requests/'+str(service_id))
