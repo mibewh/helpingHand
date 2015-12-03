@@ -17,6 +17,7 @@ block content
 							a(href='/profile/'+'#{res[3]}') #{res[3]}
 						p.list-group-item Worker: 
 							a(href='/profile/'+'#{res[4]}') #{res[4]}
+						p.list-group-item Tag: #{res[7]}
 						p.list-group-item Start Time: #{res[5]}
 						p.list-group-item Status: #{res[6]}
 						if session.type == 'client'
@@ -34,6 +35,7 @@ block content
 							a(href='/profile/'+'#{res[3]}') #{res[3]}
 						p.list-group-item Worker: 
 							a(href='/profile/'+'#{res[4]}') #{res[4]}
+						p.list-group-item Tag: #{res[7]}
 						p.list-group-item Start Time: #{res[5]}
 						p.list-group-item Status: #{res[6]}
 						if session.type == 'worker'
@@ -60,5 +62,6 @@ block content
 							a(href='/profile/'+'#{res[3]}') #{res[3]}
 						p.list-group-item Worker: 
 							a(href='/profile/'+'#{res[4]}') #{res[4]}
+						p.list-group-item Tag: #{res[7]}
 						p.list-group-item Start Time: #{res[5]}
 						p.list-group-item Status: #{res[6]}
