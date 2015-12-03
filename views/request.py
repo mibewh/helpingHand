@@ -148,7 +148,7 @@ def editRequest(service_id):
 	sql=text('''SELECT * FROM service_request WHERE service_id=:id AND client_username=:user;''')
 	result = db.engine.execute(sql, id=service_id, user=session['user'])
 	if result:
-		user, title, description, schedule, address = getRequest(service_id)
+		user, title, description, schedule, address, tag = getRequest(service_id)
 		sql2 = text('''SELECT worker_username FROM worker''')
 		results = db.engine.execute(sql2)
 		worker_names = [res[0] for res in results]
