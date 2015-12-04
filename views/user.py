@@ -98,7 +98,8 @@ def profile(username):
 	result, type = getProfile(username)
 	if result:
 		days = formatSchedule('worker', username)
-		return render_template('profile.jade', username=result[0], email=result[1], phone=result[2], type=type, days=days)
+		sql = text('''SELECT AVG(rating) FROM ''')
+		return render_template('profile.jade', username=result[0], email=result[1], phone=result[2], type=type, days=days, rating=0, reviews=[])
 	return redirect('/')
 
 @users.route('/profile/<username>/edit', methods=('GET', 'POST'))
