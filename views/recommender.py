@@ -28,7 +28,7 @@ def getFinalWorkerList(service_id):
 
 		workerScores = sorted(workerScores, key=itemgetter(1), reverse=True)
 		for idx, val in enumerate(workerList):
-			finalList.append(workerScores[idx])
+			finalList.append(workerScores[idx][0][0])
 			#workerList[idx] = workerScores[idx][0]
 	else:
 		tieredLists = []
