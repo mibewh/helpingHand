@@ -186,6 +186,8 @@ def deleteRequest(service_id):
 		result = [r[0] for r in result]
 		if result == []: return redirect('/')
 		#Delete the entry
+		sql = text('''DELETE FROM service_schedule WHERE service_id=:id''')
+		db.engine.execute(sql, id=service_id)
 		sql = text('''DELETE FROM service_request WHERE service_id=:id''')
 		db.engine.execute(sql, id=service_id)
 		return redirect('/requests')
