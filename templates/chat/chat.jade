@@ -26,7 +26,7 @@ html(lang="en")
 				socket.emit('doneTyping', {});
 			}
 			$(document).ready(function() {
-				socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
+				socket = io.connect('http://' + document.domain + '/chat');
 				// socket = io.connect('http://' + document.domain + ':' + location.port + '/chat'); //possibly remove port in production
 				//Handle the SocketIO events
 				socket.on('connect', function() {
