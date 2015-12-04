@@ -11,13 +11,21 @@ block content
 			h1 #{result[0]}
 				button.btn.btn-xs.btn-primary(onclick="popup('/chat/"+"#{result[6]}"+";"+result[3]+"'); return false;") Chat
 			p #{result[1]}
-			p Client: 
+			p 
+				b Client: 
 				a(href='/profile/'+result[2]) #{result[2]}
-			p Worker: 
+			p 
+				b Worker: 
 				a(href='/profile/'+result[3]) #{result[3]}
-			p Tag: #{result[7]}
-			p Time: #{result[4]}
-			p Status: #{result[5]}
+			p 
+				b Tag: 
+				span.badge #{result[7]}
+			p 
+				b Time: 
+				#{result[4]}
+			p 
+				b Status: 
+				#{result[5]}
 		if result[5] == 'pending'
 			if session.user == result[3]
 				.col-md-6

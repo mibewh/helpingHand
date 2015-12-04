@@ -9,14 +9,20 @@ block content
 	.col-md-6
 		.panel.panel-default.text-left(style="padding-left:2%")
 			h1 #{title}
-			p Tag: #{tag}
+			p 
+				b Tag: 
+				span.badge #{tag}
 			p #{description}
-			p Client: 
+			p 
+				b Client: 
 				a(href='/profile/'+client_username) #{client_username}
 
 				button.btn.btn-xs.btn-primary(onclick="popup('/chat/"+id+";"+session.user+"'); return false;") Chat
-			p Address: #{address}
-			p Schedule:
+			p 
+				b Address: 
+				#{address}
+			p 
+				b Schedule:
 			each day in days
 				p #{day}
 		if interested

@@ -10,8 +10,12 @@ block content
 				ul.list-group
 					h4.list-group-item.list-group-item-info
 						a(href='/requests/'+'#{res[0]}') #{res[2]}
-					//p.list-group-item #{res[3]}
-					p.list-group-item Tag: #{res[6]}
-					p.list-group-item Address: #{res[4]}
+					.list-group-item
+						.text-center
+							b Tag: 
+							span.badge #{res[6]}
+					p.list-group-item 
+						b Address: 
+						#{res[4]}
 	else
-		p No results found
+		h4 No results found

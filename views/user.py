@@ -108,12 +108,15 @@ def profile(username):
 		numRatings = result2[1]
 		avgRating = None
 		if numRatings != 0:
-			1.0*totalRating/numRatings
-		sql = text('''SELECT rating, review, tag
-			FROM contract
+			avgRating = 1.0*totalRating/numRatings
+		sql = text('''SELECT to_char(time_finish AT TIME ZONE 'CDT', 'MM/DD/YY'), rating, review, tag
+			FROM contract c, service_request s
 			WHERE worker_username=:username AND time_finish IS NOT NULL
-			ORDER BY time_finish DESC''')
-		return render_template('profile.jade', username=result[0], email=result[1], phone=result[2], type=type, days=days, rating=avgRating) #, reviews=
+			AND c.service_id=s.service_id
+			ORDER BY time_finish DESC
+			LIMIT 5;''')
+		reviews = db.engine.execute(sql, username=username).fetchall()
+		return render_template('profile.jade', username=result[0], email=result[1], phone=result[2], type=type, days=days, rating=avgRating, reviews=reviews)
 	return redirect('/')
 
 @users.route('/profile/<username>/edit', methods=('GET', 'POST'))

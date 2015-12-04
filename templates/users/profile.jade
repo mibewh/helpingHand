@@ -26,14 +26,15 @@ block content
 						each day in days
 							p #{day}
 					p 
-						b Rating:
+						b Average Rating:
 						input.ratingInput#rating(type='number', min=0, max=5, value=rating, data-size='sm', readonly="readonly")
 					p
 						b Recent Reviews:
 					each review in reviews
-						p #{review[0]}
-						input.ratingInput#rating(type='number', min=0, max=5, value=review[1], data-size='sm', readonly="readonly")
-						P #{review[2]}
+						p #{review[0]} 
+							span.badge #{review[3]}
+							input.ratingInput(type='number', min=0, max=5, value=review[1], data-size='xxs', readonly="readonly")
+							#{review[2]}
 			br
 			if session.user == username
 				if session.type == 'worker'

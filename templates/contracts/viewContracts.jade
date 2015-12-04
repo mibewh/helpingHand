@@ -12,14 +12,22 @@ block content
 					ul.list-group
 						h4.list-group-item.list-group-item-info
 							a(href='/contracts/'+'#{res[0]}') #{res[1]}
-						//p.list-group-item #{res[2]}
-						p.list-group-item Client: 
+						p.list-group-item 
+							b Client: 
 							a(href='/profile/'+'#{res[3]}') #{res[3]}
-						p.list-group-item Worker: 
+						p.list-group-item 
+							b Worker: 
 							a(href='/profile/'+'#{res[4]}') #{res[4]}
-						p.list-group-item Tag: #{res[7]}
-						p.list-group-item Start Time: #{res[5]}
-						p.list-group-item Status: #{res[6]}
+						.list-group-item 
+							.text-center
+								b Tag: 
+								span.badge #{res[7]}
+						p.list-group-item 
+							b Start Time: 
+							#{res[5]}
+						p.list-group-item 
+							b Status: 
+							#{res[6]}
 						if session.type == 'client'
 							a.btn.btn-lg.btn-primary.btn-block(href='/contracts/'+'#{res[0]}'+'/complete') Complete
 	.row
@@ -30,14 +38,22 @@ block content
 					ul.list-group
 						h4.list-group-item.list-group-item-info
 							a(href='/contracts/'+'#{res[0]}') #{res[1]}
-						//p.list-group-item #{res[2]}
-						p.list-group-item Client: 
+						p.list-group-item 
+							b Client: 
 							a(href='/profile/'+'#{res[3]}') #{res[3]}
-						p.list-group-item Worker: 
+						p.list-group-item 
+							b Worker: 
 							a(href='/profile/'+'#{res[4]}') #{res[4]}
-						p.list-group-item Tag: #{res[7]}
-						p.list-group-item Start Time: #{res[5]}
-						p.list-group-item Status: #{res[6]}
+						p.list-group-item 
+							.text-center
+								b Tag: 
+								span.badge #{res[7]}
+						p.list-group-item 
+							b Start Time: 
+							span.badge #{res[5]}
+						.list-group-item 
+							b Status: 
+							#{res[6]}
 						if session.type == 'worker'
 							.row
 								.col-md-6
@@ -57,11 +73,19 @@ block content
 					ul.list-group
 						h4.list-group-item.list-group-item-info
 							a(href='/contracts/'+'#{res[0]}') #{res[1]}
-						//p.list-group-item #{res[2]}
-						p.list-group-item Client: 
+						p.list-group-item 
+							b Client: 
 							a(href='/profile/'+'#{res[3]}') #{res[3]}
-						p.list-group-item Worker: 
+						p.list-group-item 
+							b Worker: 
 							a(href='/profile/'+'#{res[4]}') #{res[4]}
-						p.list-group-item Tag: #{res[7]}
-						p.list-group-item Start Time: #{res[5]}
-						p.list-group-item Status: #{res[6]}
+						.list-group-item 
+							.text-center
+								b Tag: 
+								span.badge #{res[7]}
+						p.list-group-item 
+							b Start Time: 
+							#{res[5]}
+						p.list-group-item 
+							b Status: 
+							#{res[6]}

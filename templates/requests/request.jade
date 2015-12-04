@@ -10,13 +10,19 @@ block content
 	.col-md-6
 		.panel.panel-default.text-left(style="padding-left:2%")
 			h1 #{title}
-			p Tag: #{tag}
+			p 
+				b Tag: 
+				span.badge #{tag}
 			p #{description}
-			p Address: #{address}
-			p Schedule:
+			p 
+				b Address: 
+				#{address}
+			p 
+				b Schedule:
 			each day in days
 				p #{day}
-			p Workers:
+			p 
+				b Workers:
 			ul
 			each worker in worker_names
 				li

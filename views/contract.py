@@ -176,7 +176,9 @@ def completeContract(id):
 		contract_worker = result[1]
 		if contract_client == session.get('user'):
 			#complete the contract
-			sql = text('''UPDATE contract SET contract_status='finished' 
+			sql = text('''UPDATE contract 
+						  SET contract_status='finished',
+						  time_finish=NOW()
 						  WHERE contract_id=:id;''')
 			db.engine.execute(sql, id=id)
 			pushNotification(contract_worker, 'Contract with '+contract_client+' complete', '/contracts/'+str(id))
