@@ -140,6 +140,8 @@ def editProfile(username):
 @users.route('/profile/<username>/delete')
 def deleteProfile(username):
 	if session['user'] == username:
+		sql = text('''DELETE FROM worker_schedule WHERE worker_username=:username;''')
+		db.engine.execute(sql, username=username)
 		sql=text('''DELETE FROM client WHERE client_username=:username;''')
 		db.engine.execute(sql, username=username)
 		sql=text('''DELETE FROM worker WHERE worker_username=:username;''')
