@@ -8,5 +8,5 @@ days(day)
 job_tag(tag)
 message(message_id, room, msg, username, time)	message_id→room, msg, username, time
 notification(notification_id, name, message, link, time, viewed)	notification_id→name, message, link, time, viewed
-service_schedule(service_id, day, hour)
+service_schedule(service_id, day, hour)	service_id
 worker_schedule(worker_username, day, hour)
