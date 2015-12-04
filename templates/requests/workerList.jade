@@ -21,11 +21,11 @@ block content
 							.row
 								.col-md-4
 									if(id, worker[0]) in selected:
-										input(type='checkbox', name='workers', value=worker, checked) 
+										input(type='checkbox', name='workers', value=worker[0], checked) 
 										|  
 										a(href='/profile/'+worker[0]) #{worker[0]}
 									else:
-										input(type='checkbox', name='workers', value=worker) 
+										input(type='checkbox', name='workers', value=worker[0]) 
 										|  
 										a(href='/profile/'+worker[0]) #{worker[0]}
 								.col-md-2
