@@ -19,22 +19,24 @@ block content
 			p 
 				b Type: 
 				#{type}
-			if session.user == username
-				if session.type == 'worker'
-					p 
-						b Schedule:
-						each day in days
-							p #{day}
-					p 
-						b Average Rating:
-						input.ratingInput#rating(type='number', min=0, max=5, value=rating, data-size='sm', readonly="readonly")
-					p
-						b Recent Reviews:
-					each review in reviews
-						p #{review[0]} 
-							span.badge #{review[3]}
+			if type == 'Worker'
+				p 
+					b Schedule:
+					each day in days
+						p #{day}
+				p 
+					b Average Rating:
+					input.ratingInput#rating(type='number', min=0, max=5, value=rating, data-size='sm', readonly="readonly")
+				p
+					b Recent Reviews:
+				each review in reviews
+					p #{review[0]} 
+						span.badge #{review[3]}
+						if review[1] != None
 							input.ratingInput(type='number', min=0, max=5, value=review[1], data-size='xxs', readonly="readonly")
-							#{review[2]}
+						else
+							br
+						#{review[2]}
 			br
 			if session.user == username
 				if session.type == 'worker'
