@@ -63,9 +63,11 @@ def getFinalWorkerList(service_id):
 def getWorkerScoreForService(worker_username, service_id):
 	tag = getServiceTag(service_id)
 	ratingScore = getRatingScore(worker_username, tag)
-	scheduleScore = getScheduleScore(worker_username, service_id)
-	# TODO: complete
-	return (1 - SCHEDULE_PROPORTION)*ratingScore + SCHEDULE_PROPORTION*scheduleScore
+	scheduleScore = getScheduleScore(worker_username, service_id)*50
+	
+	finalScore = (1 - SCHEDULE_PROPORTION)*ratingScore + SCHEDULE_PROPORTION*scheduleScore
+	#print worker_username + ' ' + str(ratingScore) + ' ' + str(scheduleScore) + ' ' + str(finalScore)
+	return finalScore
 
 # NEEDS TESTING
 # returns a score from 0 to 1 based on a little randomness and average rating
@@ -91,17 +93,19 @@ def getRatingScore(worker_username, tag):
 # returns a score from 0 to 1 based on how compatible the schedules are
 def getScheduleScore(worker_username, service_id):
 	# tuples in the form (<day>, <timeslot>), e.g:('mo', 9)
-	workerScheduleTuples, requestScheduleTuples = getSchedules(worker_username, service_id)
+	workerScheduleTuples, requestScheduleTuples = getSchedules(worker_username, service_id)\
+
 	totalServiceSlots = 0
 	commonSlots = 0
 	for serviceTuple in requestScheduleTuples:
 		for workerTuple in workerScheduleTuples:
 			totalServiceSlots += 1
-			if serviceTuple == workerTuple:
+			if serviceTuple == workerTuple: #serviceTuple[0] == workerTuple[0] and serviceTuple[1] == workerTuple[1]:
 				commonSlots += 1
+	#print worker_username + ' ' + str(commonSlots) + ' '
 	if totalServiceSlots == 0:
 		return 0
-	return commonSlots/totalServiceSlots
+	return 1.0*commonSlots/totalServiceSlots
 
 # reads the schedule from the database into a data structure
 def getSchedules(worker_username, service_id):
@@ -119,7 +123,7 @@ def getSchedules(worker_username, service_id):
 	schedule = schedule.fetchall()
 	for tuple in schedule:
 		requestScheduleArray.append([tuple[0], tuple[1]])
-		print(requestScheduleArray[-1])
+		#print(requestScheduleArray[-1])
 
 	return workerScheduleArray, requestScheduleArray
 
