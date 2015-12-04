@@ -10,14 +10,30 @@ block content
 	.col-md-6
 		.panel.panel-default.text-left(style="padding-left:2%")
 			h1 #{username}
-			p Email: #{email}
-			p Phone number: #{phone}
-			p Type: #{type}
+			p 
+				b Email: 
+				#{email}
+			p 
+				b Phone number: 
+				#{phone}
+			p 
+				b Type: 
+				#{type}
 			if session.user == username
 				if session.type == 'worker'
-					p Schedule:
-					each day in days
-						p #{day}
+					p 
+						b Schedule:
+						each day in days
+							p #{day}
+					p 
+						b Rating:
+						input.ratingInput#rating(type='number', min=0, max=5, value=rating, data-size='sm', readonly="readonly")
+					p
+						b Recent Reviews:
+					each review in reviews
+						p #{review[0]}
+						input.ratingInput#rating(type='number', min=0, max=5, value=review[1], data-size='sm', readonly="readonly")
+						P #{review[2]}
 			br
 			if session.user == username
 				if session.type == 'worker'
@@ -27,3 +43,7 @@ block content
 				br
 				a(href='/profile/'+username+'/delete') Delete
 			p
+	script(type='text/javascript').
+		$(document).ready(function() {
+			$(".ratingInput").rating({showCaption:false, showClear:false});
+		});
