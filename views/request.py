@@ -188,6 +188,8 @@ def deleteRequest(service_id):
 		#Delete the entry
 		sql = text('''DELETE FROM service_schedule WHERE service_id=:id''')
 		db.engine.execute(sql, id=service_id)
+		sql = text('''DELETE FROM worker_request WHERE service_id=:id''')
+		db.engine.execute(sql, id=service_id)
 		sql = text('''DELETE FROM service_request WHERE service_id=:id''')
 		db.engine.execute(sql, id=service_id)
 		return redirect('/requests')
