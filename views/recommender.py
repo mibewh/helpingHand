@@ -6,7 +6,7 @@ import math, random, sys
 
 #TODO: implement tiered system?
 TIERED = False
-MIN_RANDOMNESS = 0.7
+MIN_RATING_RANDOMNESS = 0.7
 NUM_RATING_MODIFIER = 0.5
 SCHEDULE_PROPORTION = 0.7
 TIER_THRESHOLDS = [5, 15, 40, 100, 250, sys.maxint]
@@ -75,7 +75,7 @@ def getRatingScore(worker_username, tag):
 		randomness = 2.5
 		avgRating = 2.5 
 	else:
-		randomness = MIN_RANDOMNESS + NUM_RATING_MODIFIER/math.sqrt(numRatings)
+		randomness = MIN_RATING_RANDOMNESS + NUM_RATING_MODIFIER/math.sqrt(numRatings)
 
 	score = (avgRating + random.uniform(-1, 1)*randomness)/5
 	if score > 1:

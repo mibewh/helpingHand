@@ -98,8 +98,22 @@ def profile(username):
 	result, type = getProfile(username)
 	if result:
 		days = formatSchedule('worker', username)
-		sql = text('''SELECT AVG(rating) FROM ''')
-		return render_template('profile.jade', username=result[0], email=result[1], phone=result[2], type=type, days=days, rating=0, reviews=[])
+		sql = text('''SELECT SUM(rating), COUNT(rating)
+			FROM contract
+			WHERE rating IS NOT NULL AND
+				worker_username=:username''')
+		result2 = db.engine.execute(sql, username=username)
+		result2 = result2.fetchone()
+		totalRating = result2[0]
+		numRatings = result2[1]
+		avgRating = None
+		if numRatings != 0:
+			1.0*totalRating/numRatings
+		sql = text('''SELECT rating, review, tag
+			FROM contract
+			WHERE worker_username=:username AND time_finish IS NOT NULL
+			ORDER BY time_finish DESC''')
+		return render_template('profile.jade', username=result[0], email=result[1], phone=result[2], type=type, days=days, rating=avgRating) #, reviews=
 	return redirect('/')
 
 @users.route('/profile/<username>/edit', methods=('GET', 'POST'))
