@@ -15,15 +15,29 @@ block content
 				.row
 					.col-md-12.text-left
 						h2 Workers:
+						p 
+							span.badge #{tag}
 						each worker in workers
-							.row.col-md-12
-								if(id, worker) in selected:
-									input(type='checkbox', name='workers', value=worker, checked) 
-									|  #{worker}
-								else:
-									input(type='checkbox', name='workers', value=worker) 
-									|  #{worker} 
+							.row
+								.col-md-4
+									if(id, worker[0]) in selected:
+										input(type='checkbox', name='workers', value=worker, checked) 
+										|  
+										a(href='/profile/'+worker[0]) #{worker[0]}
+									else:
+										input(type='checkbox', name='workers', value=worker) 
+										|  
+										a(href='/profile/'+worker[0]) #{worker[0]}
+								.col-md-2
+									if worker[2] != 0
+										input.ratingInput.text-left(type='number', min=0, max=5, value=worker[1], data-size='xxs', readonly="readonly")
+								.col.md-6
+									span.badge #{worker[2]} ratings
 					p
 					.col-md-2
 						button.btn.btn-primary.btn-block.btn-signin(type='submit') Submit
 										.row
+	script(type='text/javascript').
+		$(document).ready(function() {
+			$(".ratingInput").rating({showCaption:false, showClear:false});
+		});

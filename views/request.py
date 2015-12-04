@@ -170,7 +170,10 @@ def workerList(service_id):
 	sql = text('''SELECT service_id, worker_username FROM worker_request WHERE service_id=:id;''')
 	selected = db.engine.execute(sql, id=service_id).fetchall()
 	workerlist = recommender.getFinalWorkerList(service_id)
-	return render_template('workerList.jade', workers=workerlist, id=int(service_id), selected=selected)
+	sql = text('''SELECT tag FROM service_request WHERE service_id=:id ''')
+	tag = db.engine.execute(sql, id=service_id).fetchone()
+	tag = tag[0]
+	return render_template('workerList.jade', workers=workerlist, id=int(service_id), selected=selected, tag=tag)
 
 @requestsBP.route('/requests/<service_id>/delete')
 def deleteRequest(service_id):

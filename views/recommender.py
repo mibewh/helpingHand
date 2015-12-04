@@ -23,12 +23,14 @@ def getFinalWorkerList(service_id):
 		workerScores = []
 		for worker in workerList:
 			worker_username = worker[0]
+			avgTagRating = worker[1]
+			worker_info = (worker_username, avgTagRating)
 			workerScores.append((worker, getWorkerScoreForService(worker_username, service_id)))
 		# allWorkers contains tuples of workers and their scores
 
 		workerScores = sorted(workerScores, key=itemgetter(1), reverse=True)
 		for idx, val in enumerate(workerList):
-			finalList.append(workerScores[idx][0][0])
+			finalList.append(workerScores[idx][0])
 			#workerList[idx] = workerScores[idx][0]
 	else:
 		tieredLists = []
