@@ -6,7 +6,7 @@ block title
 block content
 	.text-left
 
-	form(method='POST', action='/requests/'+id+'/workers')
+	form(method='POST', action='/requests/#{id}/workers')
 		.row
 			.col-md-6
 				.row
@@ -14,16 +14,15 @@ block content
 						h1.text-left Select Possible Workers
 				.row
 					.col-md-12.text-left
-						- var bools = [0, 1]
 						h2 Workers:
 						each worker in workers
 							.row.col-md-12
-								if(id, worker, bools[1]) in interested:
+								if(id, worker) in selected:
 									input(type='checkbox', name='workers', value=worker, checked) 
 									|  #{worker}
 								else:
 									input(type='checkbox', name='workers', value=worker) 
-									|  #{worker}			
+									|  #{worker} 
 					p
 					.col-md-2
 						button.btn.btn-primary.btn-block.btn-signin(type='submit') Submit
