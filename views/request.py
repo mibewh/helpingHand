@@ -10,8 +10,9 @@ requestsBP = Blueprint('request', __name__, template_folder=app.template_folder+
 def selectWorkers(id):
 	workers = request.form.getlist('workers')
 	for user in workers:
+		worker_username = user[0]
 		sql = text('''INSERT INTO worker_request (service_id, worker_username) VALUES (:id, :user);''')
-		db.engine.execute(sql, id=id, user=user)
+		db.engine.execute(sql, id=id, user=worker_username)
 		pushNotification(user, 'You have been requested for a job', '/pending/'+str(id))
 
 @requestsBP.route('/create', methods=('GET', 'POST'))
