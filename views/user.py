@@ -116,7 +116,7 @@ def profile(username):
 			ORDER BY time_finish DESC
 			LIMIT 5;''')
 		reviews = db.engine.execute(sql, username=username).fetchall()
-		return render_template('profile.jade', username=result[0], email=result[1], phone=result[2], type=type, days=days, rating=avgRating, reviews=reviews)
+		return render_template('profile.jade', username=result[0], email=result[1], phone=result[2], type=type, days=days, rating=avgRating, numRatings=totalRating, reviews=reviews)
 	return redirect('/')
 
 @users.route('/profile/<username>/edit', methods=('GET', 'POST'))

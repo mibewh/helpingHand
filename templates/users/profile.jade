@@ -27,6 +27,7 @@ block content
 				p 
 					b Average Rating:
 					input.ratingInput#rating(type='number', min=0, max=5, value=rating, data-size='sm', readonly="readonly")
+					span.badge.text-right #{numRatings} ratings
 				p
 					b Recent Reviews:
 				each review in reviews
