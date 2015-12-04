@@ -1,1 +1,1 @@
-web: gunicorn -k gevent
+web: gunicorn -k gevent runner:app
