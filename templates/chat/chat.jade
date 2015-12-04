@@ -27,10 +27,11 @@ html(lang="en")
 			}
 			$(document).ready(function() {
 				//socket = io.connect('https://arcane-eyrie-4784.herokuapp.com/chat');
-				if(location.port == 5000)
-					socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
-				else
-					socket = io.connect('https://arcane-eyrie-4784.herokuapp.com/chat');
+				//if(location.port == 5000)
+					socket = io.connect('http://' + document.domain + '/chat');
+					//socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
+				//else
+				//	socket = io.connect('https://arcane-eyrie-4784.herokuapp.com/chat');
 				// socket = io.connect('http://' + document.domain + ':' + location.port + '/chat'); //possibly remove port in production
 				//Handle the SocketIO events
 				socket.on('connect', function() {
